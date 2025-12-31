@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataGen Enterprise - AI-Powered Dataset Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .enterprise-gradient {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        }
+        .professional-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .enterprise-border {
+            border: 1px solid #e5e7eb;
+        }
+        .premium-indicator {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+        }
+        .data-table {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+        }
+        .section-divider {
+            border-left: 3px solid #2563eb;
+            padding-left: 1rem;
+        }
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-active { background-color: #10b981; }
+        .status-pending { background-color: #f59e0b; }
+        .status-inactive { background-color: #6b7280; }
+        
+        .form-control {
+            border: 1px solid #d1d5db;
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+        
+        .btn-primary {
+            background-color: #2563eb;
+            border: 1px solid #2563eb;
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+        .btn-secondary {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            color: #374151;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #f9fafb;
+            border-color: #9ca3af;
+        }
+        
+        .enterprise-table th {
+            background-color: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            font-size: 0.75rem;
+        }
+        .enterprise-table td {
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .enterprise-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .action-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .action-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
+        }
+        .action-card.active {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1280px) {
+            .enterprise-table th,
+            .enterprise-table td {
+                font-size: 0.813rem;
+                padding: 0.625rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .enterprise-table {
+                font-size: 0.875rem;
+            }
+            .enterprise-table th,
+            .enterprise-table td {
+                padding: 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header .flex {
+                flex-wrap: wrap;
+            }
+            .enterprise-table {
+                font-size: 0.75rem;
+            }
+            .enterprise-table th,
+            .enterprise-table td {
+                padding: 0.375rem;
+                font-size: 0.688rem;
+            }
+            .desktop-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .enterprise-table th,
+            .enterprise-table td {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.625rem;
+            }
+            h1 {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Mobile-first optimizations */
+        @media (min-width: 640px) {
+            .section-divider {
+                padding-left: 1rem;
+            }
+        }
+
+        @media (max-width: 639px) {
+            .section-divider {
+                border-left: 2px solid #2563eb;
+                padding-left: 0.75rem;
+            }
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+        }
+        .mobile-menu.active {
+            display: block;
+        }
+
+        /* Hamburger menu animation */
+        .menu-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Ensure mobile menu items are visible */
+        .mobile-menu nav {
+            background-color: white;
+        }
+
+        /* Match heights for panels */
+        @media (min-width: 1024px) {
+            .panel-container {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+            .panel-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b enterprise-border">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="flex items-center justify-between h-14 px-4 sm:px-6">
+                <!-- Logo & Navigation -->
+                <div class="flex items-center space-x-4 sm:space-x-8 flex-1">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 enterprise-gradient rounded flex items-center justify-center mr-2 sm:mr-3">
+                            <i class="fas fa-database text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-base sm:text-lg font-semibold text-gray-900">DataGen Enterprise</h1>
+                            <p class="text-xs text-gray-500 hidden sm:block">AI-Powered Dataset Generator</p>
+                        </div>
+                    </div>
+                    <nav class="desktop-nav hidden lg:flex items-center space-x-4 xl:space-x-6">
+                        <a href="#" class="text-blue-600 font-medium text-sm border-b-2 border-blue-600 pb-0.5 whitespace-nowrap">Data Generator</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 text-sm whitespace-nowrap">API Management</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 text-sm whitespace-nowrap">Documentation</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 text-sm whitespace-nowrap">Analytics</a>
+                    </nav>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle menu">
+                    <i class="fas fa-bars menu-icon text-gray-700 text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobileMenu" class="mobile-menu lg:hidden border-t enterprise-border bg-white">
+                <nav class="px-4 py-3 space-y-2">
+                    <a href="#" class="block px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md">Data Generator</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">API Management</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Documentation</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Analytics</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Application -->
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:items-start">
+            <!-- Configuration Panel -->
+            <div class="col-span-1 lg:col-span-4 panel-container">
+                <!-- Generate Data Panel -->
+                <div id="generatePanel" class="bg-white rounded-lg professional-shadow enterprise-border h-full flex flex-col">
+                    <div class="border-b enterprise-border px-4 sm:px-6 py-4">
+                        <h2 class="text-base sm:text-lg font-semibold text-gray-900">AI Data Generation</h2>
+                        <p class="text-xs sm:text-sm text-gray-600 mt-1">Configure your AI-powered dataset</p>
+                    </div>
+
+                    <div class="p-4 sm:p-6 space-y-4 sm:space-y-6 flex-1">
+                        <!-- Business Context -->
+                        <div class="section-divider">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-3">Business Context</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-2 uppercase tracking-wide">
+                                        Data Requirements
+                                    </label>
+                                    <textarea
+                                        id="contextInput"
+                                        class="form-control w-full h-32 sm:h-40 px-3 py-2 text-sm rounded-md resize-none"
+                                        placeholder="Describe your dataset requirements...
+
+Examples:
+• Employee performance metrics with KPIs
+• Customer transaction data for Q4 analysis
+• IoT device telemetry with timestamps
+• Financial records for audit preparation"
+                                    ></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-2 uppercase tracking-wide">
+                                        Industry Template
+                                    </label>
+                                    <select class="form-control w-full px-3 py-2 text-sm rounded-md">
+                                        <option value="">Select Template</option>
+                                        <option value="finance">Financial Services</option>
+                                        <option value="healthcare">Healthcare</option>
+                                        <option value="retail">Retail & E-commerce</option>
+                                        <option value="manufacturing">Manufacturing</option>
+                                        <option value="tech">Technology</option>
+                                        <option value="custom">Custom Requirements</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Generation Parameters -->
+                        <div class="section-divider">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-3">Generation Parameters</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-2 uppercase tracking-wide">
+                                        AI Engine
+                                    </label>
+                                    <select id="aiModel" class="form-control w-full px-3 py-2 text-sm rounded-md">
+                                        <option value="standard">Standard Generator</option>
+                                        <option value="gpt4" class="text-amber-700">GPT-4 Enterprise</option>
+                                        <option value="claude" class="text-amber-700">Claude 3.5 Professional</option>
+                                        <option value="custom" class="text-purple-700">Custom Fine-tuned Model</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <label class="text-xs font-medium text-gray-700 uppercase tracking-wide">
+                                            Record Count
+                                        </label>
+                                        <span id="rowDisplay" class="text-sm font-mono text-gray-900 bg-gray-100 px-2 py-0.5 rounded">1,000</span>
+                                    </div>
+                                    <input 
+                                        type="range" 
+                                        id="rowCount" 
+                                        min="100" 
+                                        max="100000" 
+                                        value="1000" 
+                                        step="100"
+                                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                                    >
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>100</span>
+                                        <span>100K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Generate Action -->
+                        <div class="pt-4 border-t enterprise-border">
+                            <button
+                                id="generateBtn"
+                                class="btn-primary w-full py-2 sm:py-3 px-4 rounded-md font-medium text-sm flex items-center justify-center"
+                            >
+                                <i class="fas fa-play mr-2"></i>
+                                Generate Dataset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-span-1 lg:col-span-8 panel-container">
+                <!-- Data Preview Panel -->
+                <div class="bg-white rounded-lg professional-shadow enterprise-border mb-4 sm:mb-6 lg:mb-0 h-full flex flex-col">
+                    <div class="border-b enterprise-border px-4 sm:px-6 py-4">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div>
+                                <h2 class="text-base sm:text-lg font-semibold text-gray-900">Data Preview</h2>
+                                <p class="text-xs sm:text-sm text-gray-600">Live preview of your dataset</p>
+                            </div>
+                            <div class="flex items-center space-x-4 w-full sm:w-auto">
+                                <div class="text-right flex-1 sm:flex-initial">
+                                    <p class="text-xs sm:text-sm font-medium text-gray-900">
+                                        <span id="recordCount">3</span> Records
+                                    </p>
+                                    <p class="text-xs text-gray-500 hidden sm:block">Last updated: Just now</p>
+                                </div>
+                                <button id="refreshBtn" class="btn-secondary p-2 rounded">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-6 flex-1">
+                        <div class="overflow-x-auto -mx-4 sm:mx-0">
+                            <div class="inline-block min-w-full align-middle">
+                                <table class="enterprise-table data-table w-full">
+                                    <thead>
+                                        <tr id="tableHeaders">
+                                            <th class="text-left py-2 sm:py-3 px-2 sm:px-4 whitespace-nowrap">Employee ID</th>
+                                            <th class="text-left py-2 sm:py-3 px-2 sm:px-4 whitespace-nowrap">Full Name</th>
+                                            <th class="text-left py-2 sm:py-3 px-2 sm:px-4 whitespace-nowrap">Department</th>
+                                            <th class="text-left py-2 sm:py-3 px-2 sm:px-4 whitespace-nowrap">Salary</th>
+                                            <th class="text-left py-2 sm:py-3 px-2 sm:px-4 whitespace-nowrap hidden md:table-cell">Hire Date</th>
+                                            <th class="text-left py-2 sm:py-3 px-2 sm:px-4 whitespace-nowrap hidden lg:table-cell">Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="previewBody">
+                                        <tr>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">EMP-001</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm whitespace-nowrap">Sarah Chen</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Engineering</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">$128,500</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden md:table-cell">2023-03-15</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden lg:table-cell">
+                                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">Excellent</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">EMP-002</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm whitespace-nowrap">Michael Rodriguez</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Sales</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">$95,000</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden md:table-cell">2022-08-22</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden lg:table-cell">
+                                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">Good</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">EMP-003</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm whitespace-nowrap">Emily Johnson</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">Marketing</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">$87,500</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden md:table-cell">2023-01-10</td>
+                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden lg:table-cell">
+                                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">Excellent</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- API Integration Panel (Separate Card at Bottom) -->
+        <div class="mt-4 sm:mt-6">
+            <div class="bg-white rounded-lg professional-shadow enterprise-border">
+                <div class="border-b enterprise-border px-4 sm:px-6 py-4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                        <div>
+                            <h2 class="text-base sm:text-lg font-semibold text-gray-900">API Integration</h2>
+                            <p class="text-xs sm:text-sm text-gray-600">Create and manage REST API endpoints</p>
+                        </div>
+                        <span class="premium-indicator text-white text-xs px-2 py-1 rounded-full font-medium">PROFESSIONAL</span>
+                    </div>
+                </div>
+
+                <div class="p-4 sm:p-6">
+                    <div class="bg-gray-50 rounded-lg p-4 sm:p-6 border enterprise-border">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+                            <h4 class="text-sm font-medium text-gray-900">REST API Endpoint</h4>
+                            <button id="createApiBtn" class="btn-primary px-4 py-2 text-sm rounded w-full sm:w-auto">
+                                Create Endpoint
+                            </button>
+                        </div>
+
+                        <div id="apiUrlContainer" class="hidden space-y-3">
+                            <div class="bg-white border enterprise-border rounded-md p-3 sm:p-4">
+                                <p class="text-xs font-medium text-gray-700 mb-2">Base URL</p>
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                                    <code class="text-xs sm:text-sm font-mono text-gray-900 break-all flex-1">https://api.datagen.enterprise/v1/dataset/dg_abc123xyz</code>
+                                    <button id="copyApiBtn" class="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium whitespace-nowrap">
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Upgrade Modal -->
+    <div id="upgradeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full professional-shadow">
+            <div class="border-b enterprise-border px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Upgrade to Professional</h3>
+                    <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">Professional Features</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Advanced AI models (GPT-4, Claude 3.5)
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Unlimited dataset generation
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                REST API endpoints
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-3">Enterprise Benefits</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <i class="fas fa-shield-alt text-blue-500 mr-2"></i>
+                                SOC 2 Type II compliance
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-users text-blue-500 mr-2"></i>
+                                Team collaboration tools
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-clock text-blue-500 mr-2"></i>
+                                24/7 enterprise support
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-3">
+                    <button id="cancelUpgrade" class="flex-1 btn-secondary py-3 px-4 rounded-md font-medium">
+                        Continue with Standard
+                    </button>
+                    <button class="flex-1 btn-primary py-3 px-4 rounded-md font-medium">
+                        Contact Sales Team
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const contextInput = document.getElementById('contextInput');
+            const rowCount = document.getElementById('rowCount');
+            const rowDisplay = document.getElementById('rowDisplay');
+            const generateBtn = document.getElementById('generateBtn');
+            const aiModel = document.getElementById('aiModel');
+
+            // API elements
+            const createApiBtn = document.getElementById('createApiBtn');
+            const apiUrlContainer = document.getElementById('apiUrlContainer');
+            const upgradeModal = document.getElementById('upgradeModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelUpgrade = document.getElementById('cancelUpgrade');
+
+            // Mobile menu elements
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            // Professional number formatting
+            function formatNumber(num) {
+                return new Intl.NumberFormat().format(num);
+            }
+
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                const icon = this.querySelector('i');
+
+                if (mobileMenu.classList.contains('active')) {
+                    icon.className = 'fas fa-times menu-icon text-gray-700 text-xl';
+                } else {
+                    icon.className = 'fas fa-bars menu-icon text-gray-700 text-xl';
+                }
+            });
+
+            // Row count slider
+            rowCount.addEventListener('input', function() {
+                rowDisplay.textContent = formatNumber(this.value);
+            });
+
+            // AI Model selection
+            aiModel.addEventListener('change', function() {
+                if (this.value !== 'standard') {
+                    showUpgradeModal();
+                    this.value = 'standard';
+                }
+            });
+
+            // Generate button
+            generateBtn.addEventListener('click', function() {
+                if (!contextInput.value.trim()) {
+                    contextInput.focus();
+                    contextInput.style.borderColor = '#ef4444';
+                    setTimeout(() => {
+                        contextInput.style.borderColor = '';
+                    }, 2000);
+                    return;
+                }
+
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing Request...';
+                this.disabled = true;
+
+                setTimeout(() => {
+                    generateProfessionalData();
+                    this.innerHTML = '<i class="fas fa-check mr-2"></i>Generation Complete';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-play mr-2"></i>Generate Dataset';
+                        this.disabled = false;
+                    }, 1500);
+                }, 3000);
+            });
+
+            function generateProfessionalData() {
+                const professionalData = [
+                    ['EMP-006', 'Robert Anderson', 'Engineering', '$134,750', '2023-02-28', 'Excellent'],
+                    ['EMP-007', 'Jennifer Martinez', 'Product', '$119,000', '2022-09-12', 'Good'],
+                    ['EMP-008', 'Thomas Wilson', 'Engineering', '$98,500', '2023-05-15', 'Satisfactory']
+                ];
+
+                const tbody = document.getElementById('previewBody');
+                tbody.innerHTML = '';
+
+                professionalData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    const performanceClass = row[5] === 'Excellent' ? 'bg-green-100 text-green-800' :
+                                           row[5] === 'Good' ? 'bg-blue-100 text-blue-800' :
+                                           'bg-yellow-100 text-yellow-800';
+
+                    tr.innerHTML = `
+                        <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">${row[0]}</td>
+                        <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm whitespace-nowrap">${row[1]}</td>
+                        <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm">${row[2]}</td>
+                        <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-mono">${row[3]}</td>
+                        <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden md:table-cell">${row[4]}</td>
+                        <td class="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm hidden lg:table-cell">
+                            <span class="${performanceClass} text-xs px-2 py-1 rounded-full whitespace-nowrap">${row[5]}</span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('recordCount').textContent = professionalData.length;
+            }
+
+            // API Export
+            createApiBtn.addEventListener('click', function() {
+                apiUrlContainer.classList.remove('hidden');
+                this.innerHTML = '<i class="fas fa-check mr-1"></i>Created';
+                this.disabled = true;
+            });
+
+            // Modal functions
+            function showUpgradeModal() {
+                upgradeModal.classList.remove('hidden');
+            }
+
+            function hideUpgradeModal() {
+                upgradeModal.classList.add('hidden');
+            }
+
+            closeModal.addEventListener('click', hideUpgradeModal);
+            cancelUpgrade.addEventListener('click', hideUpgradeModal);
+
+            upgradeModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideUpgradeModal();
+                }
+            });
+
+            // Copy API URL
+            document.getElementById('copyApiBtn')?.addEventListener('click', function() {
+                const apiUrl = document.querySelector('#apiUrlContainer code').textContent;
+                navigator.clipboard.writeText(apiUrl);
+                this.textContent = 'Copied!';
+                this.classList.add('text-green-600');
+                setTimeout(() => {
+                    this.textContent = 'Copy';
+                    this.classList.remove('text-green-600');
+                }, 2000);
+            });
+
+            // Initialize
+            rowDisplay.textContent = formatNumber(rowCount.value);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!-- Responsive Navigation Bar -->
+<header class="navbar-container">
+  <div class="navbar-wrapper">
+    <!-- Desktop Navbar -->
+    <div class="navbar-desktop">
+      <div class="navbar-content">
+        <!-- Logo & Brand -->
+        <div class="brand-container">
+          <div class="logo-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="brand-text">
+            <h1 class="brand-title">DataGen Enterprise</h1>
+            <p class="brand-subtitle">AI-Powered Dataset Generator</p>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Menu -->
+        <nav class="nav-menu-desktop">
+          <a
+            *ngFor="let item of menuItems"
+            href="javascript:void(0)"
+            (click)="navigateTo(item.label || '')"
+            [class.active]="item.styleClass === 'nav-active'"
+            class="nav-link">
+            <i [class]="item.icon"></i>
+            <span>{{ item.label }}</span>
+          </a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button
+          class="mobile-menu-btn"
+          (click)="toggleMobileMenu()"
+          aria-label="Toggle menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Sidebar Menu -->
+    <p-sidebar
+      [(visible)]="sidebarVisible"
+      position="right"
+      [showCloseIcon]="false"
+      [modal]="true"
+      styleClass="mobile-sidebar">
+      <ng-template pTemplate="header">
+        <div class="sidebar-header-content">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-white">Menu</span>
+          </div>
+      
+        </div>
+      </ng-template>
+
+      <nav class="mobile-nav-menu">
+        <a
+          *ngFor="let item of menuItems"
+          href="javascript:void(0)"
+          (click)="navigateTo(item.label || '')"
+          [class.active]="item.styleClass === 'nav-active'"
+          class="mobile-nav-link">
+          <i [class]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      </nav>
+    </p-sidebar>
+  </div>
+</header>

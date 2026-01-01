@@ -10,3 +10,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global Styles */
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+/* Ensure content doesn't go under fixed navbar */
+@layer utilities {
+  .navbar-spacer {
+    padding-top: 4rem;
+  }
+}

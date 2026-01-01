@@ -1,0 +1,243 @@
+/* Navbar Container */
+.navbar-container {
+  @apply bg-white border-b border-gray-200 shadow-sm fixed top-0 left-0 right-0 z-50;
+}
+
+.navbar-wrapper {
+  @apply max-w-screen-2xl mx-auto;
+}
+
+/* Desktop Navbar */
+.navbar-desktop {
+  @apply block;
+}
+
+.navbar-content {
+  @apply flex items-center justify-between h-16 px-4 sm:px-6;
+}
+
+/* Brand Section */
+.brand-container {
+  @apply flex items-center space-x-3;
+}
+
+.logo-icon {
+  @apply w-10 h-10 rounded flex items-center justify-center;
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+}
+
+.logo-icon i {
+  @apply text-white text-lg;
+}
+
+.logo-icon-small {
+  @apply w-8 h-8 rounded flex items-center justify-center;
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+}
+
+.logo-icon-small i {
+  @apply text-white text-sm;
+}
+
+.brand-text {
+  @apply flex flex-col;
+}
+
+.brand-title {
+  @apply text-lg font-semibold text-gray-900 leading-tight;
+}
+
+.brand-subtitle {
+  @apply text-xs text-gray-500 hidden sm:block;
+}
+
+/* Desktop Navigation Menu */
+.nav-menu-desktop {
+  @apply hidden lg:flex items-center space-x-6;
+}
+
+.nav-link {
+  @apply text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200 cursor-pointer;
+  @apply flex items-center gap-2 pb-1 border-b-2 border-transparent;
+}
+
+.nav-link:hover {
+  @apply text-blue-600;
+}
+
+.nav-link.active {
+  @apply text-blue-600 border-blue-600;
+}
+
+.nav-link i {
+  @apply text-base;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  @apply lg:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors;
+}
+
+.mobile-menu-btn i {
+  @apply text-gray-700 text-xl;
+}
+
+/* Mobile Navigation Menu */
+.mobile-nav-menu {
+  @apply flex flex-col space-y-2 bg-white mt-8;
+}
+
+.mobile-nav-link {
+  @apply flex items-center gap-3 px-4 py-3 text-base text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors cursor-pointer;
+}
+
+.mobile-nav-link.active {
+  @apply text-blue-600 bg-blue-50;
+}
+
+.mobile-nav-link i {
+  @apply text-lg;
+  min-width: 1.5rem;
+}
+
+/* PrimeNG Sidebar Customization */
+:host ::ng-deep .p-sidebar {
+  z-index: 9999 !important;
+  background-color: #ffffff !important;
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+:host ::ng-deep .p-sidebar.mobile-sidebar {
+  width: 18rem !important;
+  background-color: #ffffff !important;
+}
+
+:host ::ng-deep .p-sidebar-mask {
+  z-index: 9998 !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+:host ::ng-deep .p-sidebar-header {
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important;
+  padding: 1rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 !important;
+}
+
+:host ::ng-deep .p-sidebar-header-content {
+  width: 100%;
+}
+
+:host ::ng-deep .p-sidebar-content {
+  background-color: #ffffff !important;
+  padding: 1rem !important;
+  overflow-y: auto;
+  margin: 0 !important;
+}
+
+/* Additional fixes for proper rendering */
+:host ::ng-deep .p-sidebar-right {
+  top: 0 !important;
+  right: 0 !important;
+  height: 100% !important;
+}
+
+/* Remove any default margins/paddings */
+:host ::ng-deep .p-sidebar * {
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .p-sidebar-left,
+:host ::ng-deep .p-sidebar-right {
+  background-color: #ffffff !important;
+}
+
+/* Ensure full height coverage */
+:host ::ng-deep .p-component-overlay {
+  z-index: 9998 !important;
+}
+
+/* Custom Sidebar Header */
+.sidebar-header-content {
+  @apply flex items-center justify-between w-full;
+}
+
+.sidebar-close-btn {
+  @apply text-white hover:bg-blue-800 rounded-md p-2 transition-colors;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-close-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.sidebar-close-btn i {
+  font-size: 1.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .brand-title {
+    @apply text-base;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-content {
+    @apply h-14;
+  }
+
+  .brand-title {
+    @apply text-sm;
+  }
+
+  .logo-icon {
+    @apply w-8 h-8;
+  }
+
+  .logo-icon i {
+    @apply text-base;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-content {
+    @apply px-3;
+  }
+
+  .brand-container {
+    @apply space-x-2;
+  }
+
+  .brand-title {
+    @apply text-xs;
+  }
+
+  .logo-icon {
+    @apply w-7 h-7;
+  }
+
+  .logo-icon i {
+    @apply text-sm;
+  }
+}
+
+/* Fix for very small screens */
+@media (max-width: 400px) {
+  .brand-subtitle {
+    @apply hidden;
+  }
+
+  .brand-title {
+    font-size: 0.7rem;
+  }
+
+  .brand-container {
+    @apply space-x-1.5;
+  }
+}

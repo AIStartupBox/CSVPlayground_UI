@@ -29,8 +29,8 @@ export class DataGeneratorComponent {
   noOfColumns: number = 1;
   minColumns: number = 1;
   maxColumns: number = 20;
-  selectedModel: string = 'Groq';
-  selectedQuality: string = 'Standard';
+  selectedModel: string = 'groq';
+  selectedQuality: string = 'basic';
 
   // Data Preview
   generatedData: EmployeeData[] = [
@@ -52,11 +52,18 @@ export class DataGeneratorComponent {
   isCreatingEndpoint: boolean = false;
   endpointId: string = '';
 
-  // Models
-  models: string[] = ['Groq', 'Gemini'];
+  // Models - key-value pairs
+  models: { key: string; value: string }[] = [
+    { key: 'groq', value: 'Groq: Llama 3.1 8B Instant' },
+    { key: 'groq', value: 'Google GenAI: Gemini 2.5 Flash' }
+  ];
 
-  // Quality Options
-  qualityOptions: string[] = ['Standard', 'Normal', 'Premium'];
+  // Quality Options - key-value pairs
+  qualityOptions: { key: string; value: string }[] = [
+    { key: 'basic', value: 'Basic' },
+    { key: 'standard', value: 'Standard' },
+    { key: 'premium', value: 'Premium' }
+  ];
 
   generateDataset(): void {
     console.log('Generating dataset with:', {

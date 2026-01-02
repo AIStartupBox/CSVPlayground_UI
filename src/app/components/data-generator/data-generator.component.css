@@ -24,3 +24,16 @@
     transform: translateY(0);
   }
 }
+
+/* PrimeNG Table Striped Rows */
+::ng-deep .p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background-color: #f9fafb !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:nth-child(odd) {
+  background-color: #ffffff !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #f3f4f6 !important;
+}

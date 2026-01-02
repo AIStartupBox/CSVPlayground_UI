@@ -80,10 +80,9 @@
               <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide">Model</label>
               <select
                 [(ngModel)]="selectedModel"
-                class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white"
-                style="--tw-ring-color: #1e293b;"
+                class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none bg-white"
               >
-                <option *ngFor="let model of models" [value]="model">{{ model }}</option>
+                <option *ngFor="let model of models" [value]="model.key">{{ model.value }}</option>
               </select>
             </div>
 
@@ -92,10 +91,9 @@
               <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide">Quality</label>
               <select
                 [(ngModel)]="selectedQuality"
-                class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white"
-                style="--tw-ring-color: #1e293b;"
+                class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none bg-white"
               >
-                <option *ngFor="let quality of qualityOptions" [value]="quality">{{ quality }}</option>
+                <option *ngFor="let quality of qualityOptions" [value]="quality.key">{{ quality.value }}</option>
               </select>
             </div>
           </div>
@@ -106,7 +104,7 @@
         <div class="px-4 lg:px-5 py-2 border-t border-gray-200 bg-white">
           <button
             (click)="generateDataset()"
-            [disabled]="isLoading"
+            [disabled]="isLoading || !dataRequirements.trim()"
             class="w-full text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
             style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);"
           >
@@ -139,7 +137,8 @@
               <div class="relative">
                 <button
                   (click)="toggleExportDropdown()"
-                  class="p-1.5 rounded-lg hover:bg-gray-100 transition-colors group"
+                  [disabled]="!isDataGenerated"
+                  class="p-1.5 rounded-lg hover:bg-gray-100 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                   title="Export Options"
                 >
                   <i class="fas fa-download text-gray-700 text-sm group-hover:scale-110 transition-transform"></i>
@@ -177,7 +176,8 @@
               <!-- Excel Export Icon -->
               <button
                 (click)="downloadExcel()"
-                class="p-1.5 rounded-lg hover:bg-green-50 transition-colors group"
+                [disabled]="!isDataGenerated"
+                class="p-1.5 rounded-lg hover:bg-green-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Export to Excel"
               >
                 <i class="fas fa-file-excel text-green-600 text-sm group-hover:scale-110 transition-transform"></i>
@@ -185,7 +185,8 @@
               <!-- CSV Export Icon -->
               <button
                 (click)="downloadCSV()"
-                class="p-1.5 rounded-lg hover:bg-blue-50 transition-colors group"
+                [disabled]="!isDataGenerated"
+                class="p-1.5 rounded-lg hover:bg-blue-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Export to CSV"
               >
                 <i class="fas fa-file-csv text-blue-600 text-sm group-hover:scale-110 transition-transform"></i>
@@ -193,7 +194,8 @@
               <!-- JSON Export Icon -->
               <button
                 (click)="downloadJSON()"
-                class="p-1.5 rounded-lg hover:bg-purple-50 transition-colors group"
+                [disabled]="!isDataGenerated"
+                class="p-1.5 rounded-lg hover:bg-purple-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Export to JSON"
               >
                 <i class="fas fa-file-code text-purple-600 text-sm group-hover:scale-110 transition-transform"></i>
@@ -279,7 +281,7 @@
 
             <button
               (click)="createEndpoint()"
-              [disabled]="isCreatingEndpoint"
+              [disabled]="isCreatingEndpoint || !isDataGenerated"
               class="w-full text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
               style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);"
             >

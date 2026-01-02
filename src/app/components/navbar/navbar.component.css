@@ -1,6 +1,7 @@
 /* Navbar Container */
 .navbar-container {
-  @apply bg-white border-b border-gray-200 shadow-sm fixed top-0 left-0 right-0 z-50;
+  @apply border-b border-gray-200 shadow-md fixed top-0 left-0 right-0 z-50;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
 }
 
 .navbar-wrapper {
@@ -23,20 +24,10 @@
 
 .logo-icon {
   @apply w-10 h-10 rounded flex items-center justify-center;
-  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
 }
 
-.logo-icon i {
-  @apply text-white text-lg;
-}
-
-.logo-icon-small {
-  @apply w-8 h-8 rounded flex items-center justify-center;
-  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
-}
-
-.logo-icon-small i {
-  @apply text-white text-sm;
+.logo-image {
+  @apply w-full h-full object-contain;
 }
 
 .brand-text {
@@ -44,11 +35,11 @@
 }
 
 .brand-title {
-  @apply text-lg font-semibold text-gray-900 leading-tight;
+  @apply text-lg font-semibold text-white leading-tight;
 }
 
 .brand-subtitle {
-  @apply text-xs text-gray-500 hidden sm:block;
+  @apply text-xs text-gray-200 hidden sm:block;
 }
 
 /* Desktop Navigation Menu */
@@ -57,16 +48,16 @@
 }
 
 .nav-link {
-  @apply text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200 cursor-pointer;
+  @apply text-sm text-gray-100 hover:text-white font-medium transition-colors duration-200 cursor-pointer;
   @apply flex items-center gap-2 pb-1 border-b-2 border-transparent;
 }
 
 .nav-link:hover {
-  @apply text-blue-600;
+  @apply text-white;
 }
 
 .nav-link.active {
-  @apply text-blue-600 border-blue-600;
+  @apply text-white border-white;
 }
 
 .nav-link i {
@@ -75,24 +66,25 @@
 
 /* Mobile Menu Button */
 .mobile-menu-btn {
-  @apply lg:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors;
+  @apply lg:hidden p-2 rounded-md hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 transition-colors;
 }
 
 .mobile-menu-btn i {
-  @apply text-gray-700 text-xl;
+  @apply text-white text-xl;
 }
 
 /* Mobile Navigation Menu */
 .mobile-nav-menu {
-  @apply flex flex-col space-y-2 bg-white mt-8;
+  @apply flex flex-col space-y-2 mt-14;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
 }
 
 .mobile-nav-link {
-  @apply flex items-center gap-3 px-4 py-3 text-base text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors cursor-pointer;
+  @apply flex items-center gap-3 px-4 py-3 text-base text-gray-100 hover:bg-white/20 rounded-lg font-medium transition-colors cursor-pointer;
 }
 
 .mobile-nav-link.active {
-  @apply text-blue-600 bg-blue-50;
+  @apply text-white bg-white/30;
 }
 
 .mobile-nav-link i {
@@ -118,7 +110,7 @@
 }
 
 :host ::ng-deep .p-sidebar-header {
-  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
   padding: 1rem !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin: 0 !important;
@@ -155,29 +147,6 @@
 /* Ensure full height coverage */
 :host ::ng-deep .p-component-overlay {
   z-index: 9998 !important;
-}
-
-/* Custom Sidebar Header */
-.sidebar-header-content {
-  @apply flex items-center justify-between w-full;
-}
-
-.sidebar-close-btn {
-  @apply text-white hover:bg-blue-800 rounded-md p-2 transition-colors;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sidebar-close-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
-}
-
-.sidebar-close-btn i {
-  font-size: 1.25rem;
 }
 
 /* Responsive Design */
@@ -220,10 +189,6 @@
 
   .logo-icon {
     @apply w-7 h-7;
-  }
-
-  .logo-icon i {
-    @apply text-sm;
   }
 }
 

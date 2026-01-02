@@ -1,0 +1,25 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad6a" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4D7BB9" />
+      <stop offset="100%" style="stop-color:#0A2342" />
+    </linearGradient>
+    <linearGradient id="grad6b" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#007D63" />
+      <stop offset="100%" style="stop-color:#00D4AA" />
+    </linearGradient>
+    <filter id="shadow6" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="200" height="200" fill="none"/>
+  <!-- Orbit 1 -->
+  <ellipse cx="100" cy="100" rx="70" ry="30" fill="none" stroke="url(#grad6a)" stroke-width="12" transform="rotate(-30 100 100)" filter="url(#shadow6)"/>
+  <!-- Orbit 2 -->
+  <ellipse cx="100" cy="100" rx="70" ry="30" fill="none" stroke="url(#grad6b)" stroke-width="10" transform="rotate(30 100 100)" opacity="0.85"/>
+  <!-- Core -->
+  <circle cx="100" cy="100" r="22" fill="#0A2342" filter="url(#shadow6)"/>
+  <circle cx="100" cy="100" r="16" fill="#00D4AA" opacity="0.9"/>
+  <circle cx="100" cy="100" r="8" fill="#B8860B" opacity="0.9"/>
+  <circle cx="100" cy="100" r="3" fill="#E8EDF5"/>
+</svg>

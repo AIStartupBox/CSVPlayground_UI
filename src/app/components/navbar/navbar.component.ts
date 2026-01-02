@@ -24,19 +24,14 @@ export class NavbarComponent {
         command: () => this.navigateTo('data-generator')
       },
       {
-        label: 'API Management',
-        icon: 'fas fa-code',
-        command: () => this.navigateTo('api-management')
+        label: 'Data Formatter',
+        icon: 'fas fa-sliders-h',
+        command: () => this.navigateTo('data-formatter')
       },
       {
         label: 'Documentation',
         icon: 'fas fa-book',
         command: () => this.navigateTo('documentation')
-      },
-      {
-        label: 'Analytics',
-        icon: 'fas fa-chart-line',
-        command: () => this.navigateTo('analytics')
       }
     ];
   }

@@ -1,16 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableShimmerComponent } from '../../common/table-shimmer/table-shimmer/table-shimmer.component';
 import { TableModule } from 'primeng/table';
-
-interface EmployeeData {
-  employeeId: string;
-  fullName: string;
-  department: string;
-  annualSalary: number;
-  hireDate: string;
-}
+import { DataGeneratorService, GenerateCSVRequest, ResponseData } from '../../services/data-generator.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-data-generator',
@@ -19,6 +13,7 @@ interface EmployeeData {
   styleUrl: './data-generator.component.css'
 })
 export class DataGeneratorComponent {
+  private dataGeneratorService = inject(DataGeneratorService);
   // Business Context
   dataRequirements: string = '';
 
@@ -32,17 +27,14 @@ export class DataGeneratorComponent {
   selectedModel: string = 'groq';
   selectedQuality: string = 'basic';
 
-  // Data Preview
-  generatedData: EmployeeData[] = [
-    { employeeId: 'EMP-2024-001', fullName: 'Sarah Chen', department: 'Engineering', annualSalary: 128500, hireDate: '2023-03-15' },
-    { employeeId: 'EMP-2024-002', fullName: 'Michael Rodriguez', department: 'Sales', annualSalary: 95000, hireDate: '2022-08-22' },
-    { employeeId: 'EMP-2024-003', fullName: 'Emily Johnson', department: 'Marketing', annualSalary: 87500, hireDate: '2023-01-10' },
-    { employeeId: 'EMP-2024-004', fullName: 'David Kim', department: 'Finance', annualSalary: 102000, hireDate: '2022-11-05' },
-    { employeeId: 'EMP-2024-005', fullName: 'Lisa Thompson', department: 'Operations', annualSalary: 78500, hireDate: '2023-06-18' }
-  ];
+  // Data Preview - Dynamic type based on API response
+  generatedData: any[] = [];
 
   // Dynamic columns
   columns: string[] = [];
+
+  // Store the raw API response data for insert endpoint
+  rawResponseData: ResponseData | null = null;
 
   totalRecords: number = 5;
   lastUpdated: string = 'Just now';
@@ -78,14 +70,54 @@ export class DataGeneratorComponent {
     this.isLoading = true;
     this.isDataGenerated = false;
 
-    // Simulate data generation with setTimeout
-    setTimeout(() => {
-      // Add your generation logic here
-      // Extract columns from generated data
-      this.extractColumns();
-      this.isLoading = false;
-      this.isDataGenerated = true;
-    }, 2000); // 2 second delay to show shimmer
+    // Prepare API payload
+    const payload: GenerateCSVRequest = {
+      context: this.dataRequirements,
+      model_name: this.selectedModel,
+      no_of_rows: this.noOfRows,
+      no_of_columns: this.noOfColumns,
+      quality: this.selectedQuality
+    };
+
+    // Call the API
+    this.dataGeneratorService.generateCSV(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: (response) => {
+          console.log('API Response:', response);
+
+          if (response.success && response.data) {
+            // Store raw response data for insert endpoint
+            this.rawResponseData = response.data;
+            // Transform the API response data into table format
+            this.transformResponseToTableData(response.data);
+            this.isDataGenerated = true;
+          }
+
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error generating dataset:', error);
+          this.isLoading = false;
+          this.isDataGenerated = false;
+        }
+      });
+  }
+
+  transformResponseToTableData(data: any): void {
+    // Set columns from API response
+    this.columns = data.columns || [];
+
+    // Transform rows array into objects for the table
+    this.generatedData = data.rows.map((row: string[]) => {
+      const rowObject: any = {};
+      this.columns.forEach((column, index) => {
+        rowObject[column] = row[index];
+      });
+      return rowObject;
+    });
+
+    console.log('Transformed data:', this.generatedData);
   }
 
   extractColumns(): void {
@@ -119,15 +151,36 @@ export class DataGeneratorComponent {
 
   createEndpoint(): void {
     console.log('Creating REST API endpoint...');
+
+    if (!this.rawResponseData) {
+      console.error('No data available to create endpoint');
+      return;
+    }
+
     this.isCreatingEndpoint = true;
 
-    // Simulate endpoint creation with setTimeout
-    setTimeout(() => {
-      // Generate a random 5-digit number for endpoint ID
-      this.endpointId = Math.floor(10000 + Math.random() * 90000).toString();
-      this.isCreatingEndpoint = false;
-      console.log('Endpoint created with ID:', this.endpointId);
-    }, 1500); // 1.5 second delay to show loader
+    // Prepare payload for insert endpoint
+    const payload = {
+      data: this.rawResponseData
+    };
+
+    console.log('Insert Payload:', payload);
+
+    // Call the insert API
+    this.dataGeneratorService.insertData(payload)
+      .pipe(take(1))
+      .subscribe({
+        next: (response) => {
+          console.log('Insert API Response:', response);
+          this.endpointId = response.id;
+          this.isCreatingEndpoint = false;
+          console.log('Endpoint created with ID:', this.endpointId);
+        },
+        error: (error) => {
+          console.error('Error creating endpoint:', error);
+          this.isCreatingEndpoint = false;
+        }
+      });
   }
 
   formatCurrency(amount: number): string {
@@ -151,7 +204,7 @@ export class DataGeneratorComponent {
   }
 
   copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(`https://csv-playground-backend.onrender.com${text}`).then(() => {
       console.log('Copied to clipboard:', text);
       // You can add a toast notification here if needed
     }).catch(err => {

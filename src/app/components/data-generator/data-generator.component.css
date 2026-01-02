@@ -1,6 +1,12 @@
 /* All styles are handled by Tailwind CSS in the template */
 .container-height{
-    height:90vh !important;
+    height: auto !important;
+}
+
+@media (min-width: 1024px) {
+    .container-height{
+        height: 90vh !important;
+    }
 }
 
 /* Export Dropdown Styles */

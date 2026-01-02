@@ -49,6 +49,8 @@ export class DataGeneratorComponent {
   showExportDropdown: boolean = false;
   isDataGenerated: boolean = false;
   isLoading: boolean = false;
+  isCreatingEndpoint: boolean = false;
+  endpointId: string = '';
 
   // Models
   models: string[] = ['Groq', 'Gemini'];
@@ -110,7 +112,15 @@ export class DataGeneratorComponent {
 
   createEndpoint(): void {
     console.log('Creating REST API endpoint...');
-    // Add endpoint creation logic here
+    this.isCreatingEndpoint = true;
+
+    // Simulate endpoint creation with setTimeout
+    setTimeout(() => {
+      // Generate a random 5-digit number for endpoint ID
+      this.endpointId = Math.floor(10000 + Math.random() * 90000).toString();
+      this.isCreatingEndpoint = false;
+      console.log('Endpoint created with ID:', this.endpointId);
+    }, 1500); // 1.5 second delay to show loader
   }
 
   formatCurrency(amount: number): string {

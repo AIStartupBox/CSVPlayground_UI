@@ -1,14 +1,367 @@
-<div class="page-container">
-  <div class="page-content">
-    <div class="page-header">
-      <i class="fas fa-database header-icon"></i>
-      <h1>Data Generator</h1>
+<!-- Main Container - Full viewport height, no scroll -->
+<div class="h-screen w-full overflow-hidden flex flex-col bg-gray-50 container-height">
+
+  <!-- Main Content Grid - Responsive layout -->
+  <div class="flex-1 flex flex-col lg:flex-row gap-3 lg:gap-4 p-3 lg:p-4 overflow-hidden">
+
+    <!-- LEFT COLUMN: AI Data Generation - 30% width -->
+    <div class="flex flex-col overflow-hidden lg:w-[30%]">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col h-full overflow-hidden">
+
+        <!-- Header -->
+        <div class="px-4 lg:px-5 pt-1.5 pb-1 border-b border-gray-200">
+          <h3 class="text-sm font-semibold text-gray-900">AI Data Generation</h3>
+          <p class="text-xs text-gray-500 mt-0.5">Configure your AI-powered dataset</p>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto px-4 lg:px-5 py-3 space-y-3">
+
+          <!-- Business Context Section -->
+          <div>
+            <h3 class="text-xs font-medium text-gray-900 mb-2 border-l-4 pl-2" style="border-color: #1e293b;">Business Context</h3>
+
+            <!-- Data Requirements -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide">Data Requirements</label>
+              <textarea
+                [(ngModel)]="dataRequirements"
+                rows="15"
+                placeholder="e.g., Generate me a JSON or CSV based on employee details&#10;name, age, salary, designation"
+                class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none resize-none placeholder-gray-400"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Fields Section -->
+          <div>
+            <!-- No of Rows -->
+            <div class="space-y-1.5 mt-2.5">
+              <div class="flex justify-between items-center">
+                <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide">No of Rows</label>
+                <span class="text-xs font-semibold" style="color: #1e293b;">{{ noOfRows }}</span>
+              </div>
+              <input
+                type="range"
+                [(ngModel)]="noOfRows"
+                [min]="minRows"
+                [max]="maxRows"
+                class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                style="accent-color: #1e293b;"
+              >
+              <div class="flex justify-between text-xs text-gray-500">
+                <span>{{ minRows }}</span>
+                <span>{{ maxRows }}</span>
+              </div>
+            </div>
+
+            <!-- No of Columns -->
+            <div class="space-y-1.5 mt-2.5">
+              <div class="flex justify-between items-center">
+                <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide">No of Columns</label>
+                <span class="text-xs font-semibold" style="color: #1e293b;">{{ noOfColumns }}</span>
+              </div>
+              <input
+                type="range"
+                [(ngModel)]="noOfColumns"
+                [min]="minColumns"
+                [max]="maxColumns"
+                class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                style="accent-color: #1e293b;"
+              >
+              <div class="flex justify-between text-xs text-gray-500">
+                <span>{{ minColumns }}</span>
+                <span>{{ maxColumns }}</span>
+              </div>
+            </div>
+
+            <!-- Model Dropdown -->
+            <div class="space-y-1.5 mt-2.5">
+              <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide">Model</label>
+              <select
+                [(ngModel)]="selectedModel"
+                class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white"
+                style="--tw-ring-color: #1e293b;"
+              >
+                <option *ngFor="let model of models" [value]="model">{{ model }}</option>
+              </select>
+            </div>
+
+            <!-- Quality Dropdown -->
+            <div class="space-y-1.5 mt-2.5">
+              <label class="block text-xs font-medium text-gray-700 uppercase tracking-wide">Quality</label>
+              <select
+                [(ngModel)]="selectedQuality"
+                class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-2 focus:border-transparent bg-white"
+                style="--tw-ring-color: #1e293b;"
+              >
+                <option *ngFor="let quality of qualityOptions" [value]="quality">{{ quality }}</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Fixed Footer with Generate Button -->
+        <div class="px-4 lg:px-5 py-2 border-t border-gray-200 bg-white">
+          <button
+            (click)="generateDataset()"
+            class="w-full text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-xs"
+            style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);"
+          >
+            Generate Dataset
+          </button>
+        </div>
+
+      </div>
     </div>
-    <div class="page-body">
-      <p class="page-description">
-        Generate AI-powered datasets with customizable schemas and data types.
-      </p>
-      <!-- Add your data generator functionality here -->
+
+    <!-- RIGHT COLUMN: Data Preview & Export - 70% width -->
+    <div class="flex flex-col gap-3 lg:gap-4 overflow-hidden lg:w-[70%]">
+
+      <!-- Data Preview Section - 50% height -->
+      <div class="flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden lg:h-1/2">
+
+        <!-- Header -->
+        <div class="px-4 lg:px-5 pt-1.5 pb-1 border-b border-gray-200 flex-shrink-0">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-semibold text-gray-900">Data Preview</h3>
+              <p class="text-xs text-gray-500 mt-0.5">Live preview of your dataset</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <!-- Dropdown Export Button -->
+              <div class="relative">
+                <button
+                  (click)="toggleExportDropdown()"
+                  class="p-1.5 rounded-lg hover:bg-gray-100 transition-colors group"
+                  title="Export Options"
+                >
+                  <i class="fas fa-download text-gray-700 text-sm group-hover:scale-110 transition-transform"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div
+                  *ngIf="showExportDropdown"
+                  class="export-dropdown absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+                >
+                  <button
+                    (click)="downloadExcel(); closeExportDropdown()"
+                    class="w-full px-3 py-2 text-left text-xs hover:bg-green-50 transition-colors flex items-center gap-2"
+                  >
+                    <i class="fas fa-file-excel text-green-600"></i>
+                    <span class="text-gray-700">Export to Excel</span>
+                  </button>
+                  <button
+                    (click)="downloadCSV(); closeExportDropdown()"
+                    class="w-full px-3 py-2 text-left text-xs hover:bg-blue-50 transition-colors flex items-center gap-2"
+                  >
+                    <i class="fas fa-file-csv text-blue-600"></i>
+                    <span class="text-gray-700">Export to CSV</span>
+                  </button>
+                  <button
+                    (click)="downloadJSON(); closeExportDropdown()"
+                    class="w-full px-3 py-2 text-left text-xs hover:bg-purple-50 transition-colors flex items-center gap-2"
+                  >
+                    <i class="fas fa-file-code text-purple-600"></i>
+                    <span class="text-gray-700">Export to JSON</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Excel Export Icon -->
+              <button
+                (click)="downloadExcel()"
+                class="p-1.5 rounded-lg hover:bg-green-50 transition-colors group"
+                title="Export to Excel"
+              >
+                <i class="fas fa-file-excel text-green-600 text-sm group-hover:scale-110 transition-transform"></i>
+              </button>
+              <!-- CSV Export Icon -->
+              <button
+                (click)="downloadCSV()"
+                class="p-1.5 rounded-lg hover:bg-blue-50 transition-colors group"
+                title="Export to CSV"
+              >
+                <i class="fas fa-file-csv text-blue-600 text-sm group-hover:scale-110 transition-transform"></i>
+              </button>
+              <!-- JSON Export Icon -->
+              <button
+                (click)="downloadJSON()"
+                class="p-1.5 rounded-lg hover:bg-purple-50 transition-colors group"
+                title="Export to JSON"
+              >
+                <i class="fas fa-file-code text-purple-600 text-sm group-hover:scale-110 transition-transform"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Shimmer (Shown while loading) -->
+        <div class="flex-1 overflow-auto" *ngIf="isLoading">
+          <app-table-shimmer [rows]="10" [columns]="5"></app-table-shimmer>
+        </div>
+
+        <!-- Table - Scrollable (Only shown when data is generated) -->
+        <div class="flex-1 overflow-auto" *ngIf="isDataGenerated && !isLoading">
+          <table class="w-full text-xs">
+            <thead class="bg-gray-50 sticky top-0 z-10">
+              <tr>
+                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Employee ID</th>
+                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Full Name</th>
+                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Department</th>
+                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Annual Salary</th>
+                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Hire Date</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let employee of generatedData" class="hover:bg-gray-50 transition-colors">
+                <td class="px-3 py-1.5 font-mono text-xs whitespace-nowrap">{{ employee.employeeId }}</td>
+                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ employee.fullName }}</td>
+                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ employee.department }}</td>
+                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ formatCurrency(employee.annualSalary) }}</td>
+                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ employee.hireDate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Placeholder (Shown when no data is generated and not loading) -->
+        <div class="flex-1 flex items-center justify-center" *ngIf="!isDataGenerated && !isLoading">
+          <div class="text-center px-4 py-8">
+            <div class="mb-4">
+              <i class="fas fa-table text-gray-300 text-5xl"></i>
+            </div>
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">No Data Generated Yet</h4>
+            <p class="text-xs text-gray-500 mb-4">Click "Generate Dataset" to create your AI-powered data</p>
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200">
+              <i class="fas fa-info-circle text-gray-400 text-xs"></i>
+              <span class="text-xs text-gray-600">Your table preview will appear here</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Export & Integration Section - 50% height -->
+      <div class="flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden lg:h-1/2">
+
+        <!-- Header -->
+        <div class="px-4 lg:px-5 pt-1.5 pb-1 border-b border-gray-200 flex-shrink-0">
+          <h3 class="text-sm font-semibold text-gray-900">Export REST API</h3>
+          <p class="text-xs text-gray-500 mt-0.5">Download or integrate your dataset</p>
+        </div>
+
+        <!-- API Integration Content -->
+        <div class="flex-1 overflow-y-auto px-4 lg:px-5 py-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-medium text-gray-900">API Integration</h3>
+            <span class="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full uppercase tracking-wide">Development</span>
+          </div>
+
+          <!-- REST API Endpoint -->
+          <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-300 rounded-lg p-3">
+            <div class="flex items-start gap-2 mb-2">
+              <div class="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);">
+                <i class="fas fa-cloud text-white text-sm"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="font-medium text-gray-900 text-xs">REST API Endpoint</div>
+                <div class="text-xs text-gray-600 mt-0.5">Generate a live API endpoint for your data</div>
+              </div>
+            </div>
+
+            <button
+              (click)="createEndpoint()"
+              class="w-full text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 text-xs"
+              style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);"
+            >
+              Create Endpoint
+            </button>
+
+            <!-- API Endpoint Display -->
+            <div class="mt-2.5 bg-white border border-gray-300 rounded-lg overflow-hidden">
+              <div class="flex items-center gap-2 px-2.5 py-2">
+                <!-- GET Method Badge -->
+                <div class="flex-shrink-0 bg-blue-500 text-white font-bold text-xs px-2.5 py-1 rounded-md">
+                  GET
+                </div>
+                <!-- API Endpoint URL -->
+                <div class="flex-1 min-w-0">
+                  <span class="text-xs text-gray-800 font-mono">/api/v1/generate</span>
+                </div>
+                <!-- Description -->
+                <div class="flex-shrink-0 text-xs text-gray-600">
+                  Generate CSV/JSON data
+                </div>
+              </div>
+            </div>
+
+            <!-- Query Parameters Documentation -->
+            <div class="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-3">
+              <h4 class="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                <i class="fas fa-book text-gray-500"></i>
+                Query Parameters
+              </h4>
+
+              <!-- Parameter: id -->
+              <div class="mb-2">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs font-mono bg-white px-2 py-0.5 rounded border border-gray-300 text-blue-600">id</span>
+                  <span class="text-xs text-gray-500">Dataset identifier</span>
+                </div>
+              </div>
+
+              <!-- Parameter: type -->
+              <div class="mb-3">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs font-mono bg-white px-2 py-0.5 rounded border border-gray-300 text-blue-600">type</span>
+                  <span class="text-xs text-gray-500">Response format (csv or json)</span>
+                </div>
+              </div>
+
+              <!-- Examples Section -->
+              <div class="border-t border-gray-300 pt-2">
+                <h5 class="text-xs font-semibold text-gray-700 mb-2">Examples:</h5>
+
+                <!-- JSON Example -->
+                <div class="mb-2">
+                  <div class="bg-white rounded border border-gray-300 p-2">
+                    <div class="flex items-start justify-between gap-2">
+                      <div class="flex items-start gap-2 flex-1 min-w-0">
+                        <span class="text-xs font-semibold text-green-600 flex-shrink-0">JSON:</span>
+                        <code class="text-xs text-gray-700 font-mono break-all">/api/v1/generate?id="12345"&type="json"</code>
+                      </div>
+                      <span (click)="copyToClipboard('/api/v1/generate?id=&quot;12345&quot;&amp;type=&quot;json&quot;')" class="cursor-pointer flex-shrink-0" title="Copy to clipboard">
+                        <i class="fas fa-copy text-gray-500 text-xs hover:text-gray-700 transition-colors"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CSV Example -->
+                <div>
+                  <div class="bg-white rounded border border-gray-300 p-2">
+                    <div class="flex items-start justify-between gap-2">
+                      <div class="flex items-start gap-2 flex-1 min-w-0">
+                        <span class="text-xs font-semibold text-blue-600 flex-shrink-0">CSV:</span>
+                        <code class="text-xs text-gray-700 font-mono break-all">/api/v1/generate?id="12345"&type="csv"</code>
+                      </div>
+                      <span (click)="copyToClipboard('/api/v1/generate?id=&quot;12345&quot;&amp;type=&quot;csv&quot;')" class="cursor-pointer flex-shrink-0" title="Copy to clipboard">
+                        <i class="fas fa-copy text-gray-500 text-xs hover:text-gray-700 transition-colors"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
+
   </div>
+
 </div>

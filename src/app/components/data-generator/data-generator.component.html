@@ -214,7 +214,8 @@
           <p-table
             [value]="generatedData"
             [scrollable]="true"
-            scrollHeight="flex"
+            scrollHeight="400px"
+            [responsive]="true"
             styleClass="p-datatable-sm p-datatable-gridlines">
             <ng-template pTemplate="header">
               <tr>
@@ -294,7 +295,7 @@
 
             <!-- API Endpoint Display -->
             <div class="mt-2.5 bg-white border border-gray-300 rounded-lg overflow-hidden">
-              <div class="flex items-center gap-2 px-2.5 py-2">
+              <div class="flex items-center gap-2 px-2.5 py-2 flex-wrap">
                 <!-- GET Method Badge -->
                 <div class="flex-shrink-0 bg-blue-500 text-white font-bold text-xs px-2.5 py-1 rounded-md">
                   GET
@@ -304,7 +305,7 @@
                   <span class="text-xs text-gray-800 font-mono">/api/v1/generate</span>
                 </div>
                 <!-- Description -->
-                <div class="flex-shrink-0 text-xs text-gray-600">
+                <div class="text-xs text-gray-500 w-full sm:w-auto sm:flex-shrink-0 sm:pl-0 pl-1">
                   Generate CSV/JSON data
                 </div>
               </div>

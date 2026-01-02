@@ -9,6 +9,30 @@
     }
 }
 
+/* Mobile Select Dropdown Fix */
+select {
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  appearance: menulist;
+  color: #374151 !important;
+  background-color: #ffffff !important;
+  font-size: 0.75rem !important;
+}
+
+/* Fix for iOS Safari */
+select:focus {
+  outline: none;
+  border-color: #1e293b;
+}
+
+/* Ensure option text is visible */
+select option {
+  color: #374151 !important;
+  background-color: #ffffff !important;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+}
+
 /* Export Dropdown Styles */
 .export-dropdown {
   animation: fadeIn 0.15s ease-in-out;
@@ -25,15 +49,4 @@
   }
 }
 
-/* PrimeNG Table Striped Rows */
-::ng-deep .p-datatable .p-datatable-tbody > tr:nth-child(even) {
-  background-color: #f9fafb !important;
-}
 
-::ng-deep .p-datatable .p-datatable-tbody > tr:nth-child(odd) {
-  background-color: #ffffff !important;
-}
-
-::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
-  background-color: #f3f4f6 !important;
-}

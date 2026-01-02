@@ -1,0 +1,29 @@
+/* Main App Container */
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+/* Add space for fixed navbar */
+app-navbar {
+  display: block;
+  height: 64px;
+}
+
+/* Router Outlet Container - remove extra padding */
+router-outlet {
+  display: none;
+}
+
+/* Mobile responsive padding */
+@media (max-width: 768px) {
+  app-navbar {
+    height: 56px;
+  }
+}
+
+@media (max-width: 640px) {
+  app-navbar {
+    height: 56px;
+  }
+}

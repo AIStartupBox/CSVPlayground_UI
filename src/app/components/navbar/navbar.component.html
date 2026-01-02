@@ -19,9 +19,8 @@
         <nav class="nav-menu-desktop">
           <a
             *ngFor="let item of menuItems"
-            href="javascript:void(0)"
-            (click)="navigateTo(item.label || '')"
-            [class.active]="item.styleClass === 'nav-active'"
+            [routerLink]="item['route']"
+            routerLinkActive="active"
             class="nav-link">
             <i [class]="item.icon"></i>
             <span>{{ item.label }}</span>
@@ -55,9 +54,9 @@
       <nav class="mobile-nav-menu">
         <a
           *ngFor="let item of menuItems"
-          href="javascript:void(0)"
-          (click)="navigateTo(item.label || '')"
-          [class.active]="item.styleClass === 'nav-active'"
+          [routerLink]="item['route']"
+          routerLinkActive="active"
+          (click)="toggleMobileMenu()"
           class="mobile-nav-link">
           <i [class]="item.icon"></i>
           <span>{{ item.label }}</span>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WorkInProgressComponent } from '../common/work-in-progress/work-in-progress.component';
+import { WorkInProgressComponent } from '../../common/work-in-progress/work-in-progress.component';
 
 @Component({
   selector: 'app-data-formatter',

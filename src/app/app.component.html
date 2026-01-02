@@ -1,4 +1,8 @@
-<!-- Navbar Component -->
-<app-navbar></app-navbar>
+@if (isServerHealthy) {
+  <!-- Navbar Component -->
+  <app-navbar></app-navbar>
 
-<router-outlet />
+  <router-outlet />
+} @else {
+  <app-server-loading></app-server-loading>
+}

@@ -44,13 +44,6 @@
       [showCloseIcon]="false"
       [modal]="true"
       styleClass="mobile-sidebar">
-      <ng-template pTemplate="header">
-        <div class="sidebar-header-content">
-          
-      
-        </div>
-      </ng-template>
-
       <nav class="mobile-nav-menu">
         <a
           *ngFor="let item of menuItems"
@@ -58,8 +51,10 @@
           routerLinkActive="active"
           (click)="toggleMobileMenu()"
           class="mobile-nav-link">
-          <i [class]="item.icon"></i>
-          <span>{{ item.label }}</span>
+          <div class="mobile-nav-link-icon">
+            <i [class]="item.icon"></i>
+          </div>
+          <span class="mobile-nav-link-text">{{ item.label }}</span>
         </a>
       </nav>
     </p-sidebar>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableShimmerComponent } from '../../common/table-shimmer/table-shimmer/table-shimmer.component';
+import { TableModule } from 'primeng/table';
 
 interface EmployeeData {
   employeeId: string;
@@ -13,7 +14,7 @@ interface EmployeeData {
 
 @Component({
   selector: 'app-data-generator',
-  imports: [CommonModule, FormsModule, TableShimmerComponent],
+  imports: [CommonModule, FormsModule, TableShimmerComponent, TableModule],
   templateUrl: './data-generator.component.html',
   styleUrl: './data-generator.component.css'
 })
@@ -39,6 +40,9 @@ export class DataGeneratorComponent {
     { employeeId: 'EMP-2024-004', fullName: 'David Kim', department: 'Finance', annualSalary: 102000, hireDate: '2022-11-05' },
     { employeeId: 'EMP-2024-005', fullName: 'Lisa Thompson', department: 'Operations', annualSalary: 78500, hireDate: '2023-06-18' }
   ];
+
+  // Dynamic columns
+  columns: string[] = [];
 
   totalRecords: number = 5;
   lastUpdated: string = 'Just now';
@@ -68,9 +72,25 @@ export class DataGeneratorComponent {
     // Simulate data generation with setTimeout
     setTimeout(() => {
       // Add your generation logic here
+      // Extract columns from generated data
+      this.extractColumns();
       this.isLoading = false;
       this.isDataGenerated = true;
     }, 2000); // 2 second delay to show shimmer
+  }
+
+  extractColumns(): void {
+    if (this.generatedData && this.generatedData.length > 0) {
+      this.columns = Object.keys(this.generatedData[0]);
+    }
+  }
+
+  formatColumnHeader(column: string): string {
+    // Convert camelCase to Title Case with spaces
+    return column
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .trim();
   }
 
   downloadExcel(): void {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
@@ -11,7 +11,8 @@ import { filter } from 'rxjs/operators';
   selector: 'app-navbar',
   imports: [CommonModule, MenubarModule, ButtonModule, SidebarModule, RouterModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrl: './navbar.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent {
   menuItems: MenuItem[] = [];

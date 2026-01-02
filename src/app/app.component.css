@@ -2,12 +2,16 @@
 :host {
   display: block;
   min-height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Add space for fixed navbar */
 app-navbar {
   display: block;
   height: 64px;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Router Outlet Container - remove extra padding */

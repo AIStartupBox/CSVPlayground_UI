@@ -202,28 +202,29 @@
           <app-table-shimmer [rows]="10" [columns]="5"></app-table-shimmer>
         </div>
 
-        <!-- Table - Scrollable (Only shown when data is generated) -->
+        <!-- PrimeNG Table - Scrollable with Sort (Only shown when data is generated) -->
         <div class="flex-1 overflow-auto" *ngIf="isDataGenerated && !isLoading">
-          <table class="w-full text-xs">
-            <thead class="bg-gray-50 sticky top-0 z-10">
+          <p-table
+            [value]="generatedData"
+            [scrollable]="true"
+            scrollHeight="flex"
+            styleClass="p-datatable-sm p-datatable-gridlines">
+            <ng-template pTemplate="header">
               <tr>
-                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Employee ID</th>
-                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Full Name</th>
-                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Department</th>
-                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Annual Salary</th>
-                <th class="px-3 py-1.5 text-left font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200 whitespace-nowrap text-xs">Hire Date</th>
+                <th *ngFor="let col of columns" [pSortableColumn]="col" class="text-xs" style="min-width: 150px;">
+                  {{ formatColumnHeader(col) }} <p-sortIcon [field]="col"></p-sortIcon>
+                </th>
               </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr *ngFor="let employee of generatedData" class="hover:bg-gray-50 transition-colors">
-                <td class="px-3 py-1.5 font-mono text-xs whitespace-nowrap">{{ employee.employeeId }}</td>
-                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ employee.fullName }}</td>
-                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ employee.department }}</td>
-                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ formatCurrency(employee.annualSalary) }}</td>
-                <td class="px-3 py-1.5 text-xs whitespace-nowrap">{{ employee.hireDate }}</td>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td *ngFor="let col of columns" class="text-xs">
+                  <span *ngIf="col === 'annualSalary'; else normalCell">{{ formatCurrency(rowData[col]) }}</span>
+                  <ng-template #normalCell>{{ rowData[col] }}</ng-template>
+                </td>
               </tr>
-            </tbody>
-          </table>
+            </ng-template>
+          </p-table>
         </div>
 
         <!-- Placeholder (Shown when no data is generated and not loading) -->

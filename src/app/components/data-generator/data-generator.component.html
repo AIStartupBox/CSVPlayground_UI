@@ -1,3 +1,6 @@
+<!-- Toast Component -->
+<p-toast position="top-right"></p-toast>
+
 <!-- Main Container - Full viewport height, no scroll -->
 <div class="h-screen w-full overflow-hidden flex flex-col bg-gray-50 container-height">
 
@@ -173,21 +176,13 @@
                 </div>
               </div>
 
-              <!-- Excel Export Icon -->
-              <button
-                (click)="downloadExcel()"
-                [disabled]="!isDataGenerated"
-                class="p-1.5 rounded-lg hover:bg-green-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Export to Excel"
-              >
-                <i class="fas fa-file-excel text-green-600 text-sm group-hover:scale-110 transition-transform"></i>
-              </button>
               <!-- CSV Export Icon -->
               <button
                 (click)="downloadCSV()"
                 [disabled]="!isDataGenerated"
                 class="p-1.5 rounded-lg hover:bg-blue-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Export to CSV"
+                pTooltip="Copy as CSV"
+                tooltipPosition="bottom"
               >
                 <i class="fas fa-file-csv text-blue-600 text-sm group-hover:scale-110 transition-transform"></i>
               </button>
@@ -196,7 +191,8 @@
                 (click)="downloadJSON()"
                 [disabled]="!isDataGenerated"
                 class="p-1.5 rounded-lg hover:bg-purple-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Export to JSON"
+                pTooltip="Copy as JSON"
+                tooltipPosition="bottom"
               >
                 <i class="fas fa-file-code text-purple-600 text-sm group-hover:scale-110 transition-transform"></i>
               </button>

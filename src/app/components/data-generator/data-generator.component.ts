@@ -3,17 +3,22 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableShimmerComponent } from '../../common/table-shimmer/table-shimmer/table-shimmer.component';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
+import { MessageService } from 'primeng/api';
 import { DataGeneratorService, GenerateCSVRequest, ResponseData } from '../../services/data-generator.service';
 import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-data-generator',
-  imports: [CommonModule, FormsModule, TableShimmerComponent, TableModule],
+  imports: [CommonModule, FormsModule, TableShimmerComponent, TableModule, ToastModule, TooltipModule],
+  providers: [MessageService],
   templateUrl: './data-generator.component.html',
   styleUrl: './data-generator.component.css'
 })
 export class DataGeneratorComponent {
   private dataGeneratorService = inject(DataGeneratorService);
+  private messageService = inject(MessageService);
   // Business Context
   dataRequirements: string = '';
 
@@ -92,6 +97,14 @@ export class DataGeneratorComponent {
             // Transform the API response data into table format
             this.transformResponseToTableData(response.data);
             this.isDataGenerated = true;
+
+            // Show success toast
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: `Dataset generated successfully with ${this.noOfRows} rows!`,
+              life: 4000
+            });
           }
 
           this.isLoading = false;
@@ -100,6 +113,14 @@ export class DataGeneratorComponent {
           console.error('Error generating dataset:', error);
           this.isLoading = false;
           this.isDataGenerated = false;
+
+          // Show error toast
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to generate dataset. Please try again.',
+            life: 5000
+          });
         }
       });
   }
@@ -154,6 +175,12 @@ export class DataGeneratorComponent {
 
     if (!this.rawResponseData) {
       console.error('No data available to create endpoint');
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please generate data first before creating an endpoint.',
+        life: 4000
+      });
       return;
     }
 
@@ -175,10 +202,26 @@ export class DataGeneratorComponent {
           this.endpointId = response.id;
           this.isCreatingEndpoint = false;
           console.log('Endpoint created with ID:', this.endpointId);
+
+          // Show success toast
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Endpoint Created',
+            detail: `API endpoint created successfully! ID: ${this.endpointId}`,
+            life: 5000
+          });
         },
         error: (error) => {
           console.error('Error creating endpoint:', error);
           this.isCreatingEndpoint = false;
+
+          // Show error toast
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to create endpoint. Please try again.',
+            life: 5000
+          });
         }
       });
   }

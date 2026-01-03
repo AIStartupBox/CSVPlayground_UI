@@ -49,4 +49,74 @@ select option {
   }
 }
 
+/* Toast Styling */
+::ng-deep .p-toast {
+  opacity: 0.98;
+  z-index: 10000;
+}
+
+::ng-deep .p-toast .p-toast-message {
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-info {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: 1px solid #60a5fa;
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-info .p-toast-summary,
+::ng-deep .p-toast .p-toast-message.p-toast-message-info .p-toast-detail {
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: 1px solid #34d399;
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-success .p-toast-summary,
+::ng-deep .p-toast .p-toast-message.p-toast-message-success .p-toast-detail {
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-warn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: 1px solid #fbbf24;
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-warn .p-toast-summary,
+::ng-deep .p-toast .p-toast-message.p-toast-message-warn .p-toast-detail {
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: 1px solid #f87171;
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-error .p-toast-summary,
+::ng-deep .p-toast .p-toast-message.p-toast-message-error .p-toast-detail {
+  color: #ffffff !important;
+}
+
+::ng-deep .p-toast .p-toast-message .p-toast-message-content {
+  padding: 1rem;
+}
+
+::ng-deep .p-toast .p-toast-message .p-toast-summary {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+::ng-deep .p-toast .p-toast-message .p-toast-detail {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
 

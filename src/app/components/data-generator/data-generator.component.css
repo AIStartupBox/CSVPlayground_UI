@@ -74,10 +74,27 @@ select option {
   z-index: 10000;
 }
 
+/* Mobile Toast Adjustments */
+@media (max-width: 768px) {
+  ::ng-deep .p-toast {
+    width: calc(100% - 2rem) !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    top: 1rem !important;
+  }
+
+  ::ng-deep .p-toast .p-toast-message {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+}
+
 ::ng-deep .p-toast .p-toast-message {
   backdrop-filter: blur(10px);
   border-radius: 0.5rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 ::ng-deep .p-toast .p-toast-message.p-toast-message-info {

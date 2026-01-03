@@ -49,6 +49,25 @@ select option {
   }
 }
 
+/* PrimeNG Table - Remove click/selection color */
+::ng-deep .p-datatable .p-datatable-tbody > tr {
+  cursor: default;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:focus {
+  outline: none;
+  background-color: inherit !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:active {
+  background-color: inherit !important;
+}
+
 /* Toast Styling */
 ::ng-deep .p-toast {
   opacity: 0.98;

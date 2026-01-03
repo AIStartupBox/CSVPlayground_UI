@@ -74,6 +74,11 @@ select option {
   z-index: 10000;
 }
 
-
+/* Disable Toast on Mobile Devices */
+@media (max-width: 768px) {
+  ::ng-deep .p-toast {
+    display: none !important;
+  }
+}
 
 

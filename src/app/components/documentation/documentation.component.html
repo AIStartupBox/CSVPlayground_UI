@@ -8,7 +8,452 @@
       <p class="page-description">
         Learn how to use the Neoluxis Enterprise platform with comprehensive guides and examples.
       </p>
-      <app-work-in-progress></app-work-in-progress>
+
+      <!-- Table of Contents -->
+      <div class="toc-section">
+        <h2 class="section-title">Table of Contents</h2>
+        <ul class="toc-list">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#what-it-does">What is the Data Generator Tool?</a></li>
+          <li><a href="#real-world-problems">Solving Real-World Problems</a></li>
+          <li><a href="#key-features">Key Features</a></li>
+          <li><a href="#how-to-use">How to Use</a></li>
+          <li><a href="#best-practices">Best Practices</a></li>
+          <li><a href="#use-cases">Use Cases</a></li>
+        </ul>
+      </div>
+
+      <!-- Overview Section -->
+      <div class="doc-section" id="overview">
+        <h2 class="section-title">
+          <i class="fas fa-info-circle section-icon"></i>
+          Overview
+        </h2>
+        <p class="section-content">
+          The <strong>Neoluxis Data Generator</strong> is an AI-powered tool designed to help developers, testers, and data analysts
+          generate realistic, structured datasets in seconds. Whether you need CSV, JSON, or Excel formats, our tool leverages
+          advanced AI models to create contextually accurate data based on your business requirements.
+        </p>
+      </div>
+
+      <!-- What It Does Section -->
+      <div class="doc-section" id="what-it-does">
+        <h2 class="section-title">
+          <i class="fas fa-cogs section-icon"></i>
+          What is the Data Generator Tool?
+        </h2>
+        <p class="section-content">
+          The Data Generator Tool is an intelligent system that uses AI to create custom datasets based on natural language descriptions.
+          Instead of manually crafting mock data or writing complex scripts, you simply describe what you need, and the AI generates
+          realistic, consistent data that matches your specifications.
+        </p>
+        <div class="highlight-box">
+          <h3 class="highlight-title">Core Capabilities:</h3>
+          <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> <strong>AI-Powered Generation:</strong> Uses advanced language models (Groq Llama 3.1, Google Gemini) to understand your requirements</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Multi-Format Export:</strong> Export to CSV, JSON, or Excel with one click</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Flexible Configuration:</strong> Control rows (1-100), columns (1-20), and quality levels</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Quick Copy & Paste:</strong> Copy data directly to your clipboard without downloading</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Real-Time Preview:</strong> See your data instantly with sortable, scrollable tables</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Real-World Problems Section -->
+      <div class="doc-section" id="real-world-problems">
+        <h2 class="section-title">
+          <i class="fas fa-lightbulb section-icon"></i>
+          How It Solves Real-World Problems
+        </h2>
+        <p class="section-content">
+          Developers and teams face numerous challenges when working with data. Our Data Generator Tool addresses these pain points directly:
+        </p>
+
+        <div class="problem-solution-grid">
+          <!-- Problem 1 -->
+          <div class="problem-card">
+            <div class="problem-header">
+              <i class="fas fa-exclamation-triangle problem-icon"></i>
+              <h3>Problem: Time-Consuming Manual Data Creation</h3>
+            </div>
+            <p class="problem-description">
+              Creating realistic test data manually is tedious and time-consuming. Writing hundreds of rows of employee records,
+              product catalogs, or user profiles can take hours or even days.
+            </p>
+            <div class="solution">
+              <i class="fas fa-check solution-icon"></i>
+              <strong>Solution:</strong> Generate up to 100 rows of contextually accurate data in seconds, not hours.
+            </div>
+          </div>
+
+          <!-- Problem 2 -->
+          <div class="problem-card">
+            <div class="problem-header">
+              <i class="fas fa-exclamation-triangle problem-icon"></i>
+              <h3>Problem: Inconsistent Test Data</h3>
+            </div>
+            <p class="problem-description">
+              Manually created data often has inconsistencies, missing values, or unrealistic patterns that don't reflect
+              production scenarios, leading to bugs that only appear in live environments.
+            </p>
+            <div class="solution">
+              <i class="fas fa-check solution-icon"></i>
+              <strong>Solution:</strong> AI ensures data consistency, realistic patterns, and proper relationships between fields.
+            </div>
+          </div>
+
+          <!-- Problem 3 -->
+          <div class="problem-card">
+            <div class="problem-header">
+              <i class="fas fa-exclamation-triangle problem-icon"></i>
+              <h3>Problem: No Technical Skills Required</h3>
+            </div>
+            <p class="problem-description">
+              Writing scripts or using complex tools to generate data requires programming knowledge that not everyone has,
+              limiting who can create test datasets.
+            </p>
+            <div class="solution">
+              <i class="fas fa-check solution-icon"></i>
+              <strong>Solution:</strong> Simply describe what you need in plain English - no coding or technical skills required.
+            </div>
+          </div>
+
+          <!-- Problem 4 -->
+          <div class="problem-card">
+            <div class="problem-header">
+              <i class="fas fa-exclamation-triangle problem-icon"></i>
+              <h3>Problem: Privacy and Compliance Concerns</h3>
+            </div>
+            <p class="problem-description">
+              Using production data for testing violates privacy regulations (GDPR, HIPAA) and exposes sensitive information.
+            </p>
+            <div class="solution">
+              <i class="fas fa-check solution-icon"></i>
+              <strong>Solution:</strong> Generate synthetic, realistic data that mimics production without using real user information.
+            </div>
+          </div>
+
+          <!-- Problem 6 -->
+          <div class="problem-card">
+            <div class="problem-header">
+              <i class="fas fa-exclamation-triangle problem-icon"></i>
+              <h3>Problem: Format Conversion Headaches</h3>
+            </div>
+            <p class="problem-description">
+              Converting between CSV, JSON, and Excel formats requires different tools and workflows, slowing down development.
+            </p>
+            <div class="solution">
+              <i class="fas fa-check solution-icon"></i>
+              <strong>Solution:</strong> Export to any format instantly, or copy data directly to your clipboard.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Features Section -->
+      <div class="doc-section" id="key-features">
+        <h2 class="section-title">
+          <i class="fas fa-star section-icon"></i>
+          Key Features
+        </h2>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper ai-gradient">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI-Powered Intelligence</h3>
+            <p>Choose between Groq Llama 3.1 8B or Google Gemini 2.5 Flash for context-aware data generation.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper export-gradient">
+              <i class="fas fa-file-export"></i>
+            </div>
+            <h3>Multiple Export Formats</h3>
+            <p>Download as Excel (.xlsx), CSV, or JSON. Copy formatted data directly to clipboard.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper api-gradient">
+              <i class="fas fa-copy"></i>
+            </div>
+            <h3>Quick Copy & Paste</h3>
+            <p>Copy your generated data directly to clipboard in CSV or JSON format for instant use.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper quality-gradient">
+              <i class="fas fa-layer-group"></i>
+            </div>
+            <h3>Quality Control</h3>
+            <p>Three quality tiers (Basic, Standard, Premium) to balance speed and data sophistication.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper preview-gradient">
+              <i class="fas fa-table"></i>
+            </div>
+            <h3>Live Data Preview</h3>
+            <p>See your generated data immediately in a sortable, scrollable table with formatted columns.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper config-gradient">
+              <i class="fas fa-sliders-h"></i>
+            </div>
+            <h3>Flexible Configuration</h3>
+            <p>Customize row count (1-100) and column count (1-20) with intuitive slider controls.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Use Section -->
+      <div class="doc-section" id="how-to-use">
+        <h2 class="section-title">
+          <i class="fas fa-graduation-cap section-icon"></i>
+          How to Use the Data Generator
+        </h2>
+
+        <div class="steps-container">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Describe Your Data Requirements</h3>
+              <p>In the "Data Requirements" text area, describe what kind of data you need in natural language.</p>
+              <div class="code-example">
+                <strong>Example:</strong>
+                <pre>Generate employee data with the following fields:
+- Full name
+- Email address
+- Department (Engineering, Sales, Marketing, HR)
+- Annual salary ($40,000 to $150,000)
+- Years of experience (0-30)
+- Employee ID (format: EMP-XXXXX)</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Configure Generation Parameters</h3>
+              <p>Use the sliders and dropdowns to customize your dataset:</p>
+              <ul class="config-list">
+                <li><strong>Number of Rows:</strong> 1 to 100 rows</li>
+                <li><strong>Number of Columns:</strong> 1 to 20 columns</li>
+                <li><strong>Model:</strong> Choose AI model (Groq or Google GenAI)</li>
+                <li><strong>Quality:</strong> Basic (fast), Standard (balanced), or Premium (detailed)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Generate Your Dataset</h3>
+              <p>Click the "Generate Dataset" button. The AI will process your request and create your data in seconds.</p>
+              <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                <span>The button is disabled until you enter data requirements. Watch for the loading spinner during generation.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Preview & Export</h3>
+              <p>Your data appears in the preview table. You can sort columns by clicking the headers. Use the export options to download or copy your data:</p>
+              <ul class="export-options-list">
+                <li><i class="fas fa-file-excel text-green"></i> <strong>Excel:</strong> Download as .xlsx file for use in spreadsheet applications</li>
+                <li><i class="fas fa-file-csv text-blue"></i> <strong>CSV:</strong> Download or copy as CSV for database imports or simple data sharing</li>
+                <li><i class="fas fa-file-code text-purple"></i> <strong>JSON:</strong> Download or copy as JSON for application development and APIs</li>
+              </ul>
+              <div class="info-box">
+                <i class="fas fa-lightbulb"></i>
+                <span>Tip: Use the copy buttons to quickly paste data into your applications without downloading files!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Best Practices Section -->
+      <div class="doc-section" id="best-practices">
+        <h2 class="section-title">
+          <i class="fas fa-certificate section-icon"></i>
+          Best Practices & Tips
+        </h2>
+
+        <div class="best-practices-grid">
+          <div class="practice-card">
+            <div class="practice-icon">
+              <i class="fas fa-align-left"></i>
+            </div>
+            <h3>Be Specific in Your Descriptions</h3>
+            <p>
+              The more detailed your requirements, the better the AI understands your needs. Specify data types,
+              formats, ranges, and relationships between fields.
+            </p>
+            <div class="example-comparison">
+              <div class="bad-example">
+                <strong>❌ Vague:</strong> "Generate user data"
+              </div>
+              <div class="good-example">
+                <strong>✅ Specific:</strong> "Generate user data with username, email, age (18-65), country, registration date (2023-2024)"
+              </div>
+            </div>
+          </div>
+
+          <div class="practice-card">
+            <div class="practice-icon">
+              <i class="fas fa-balance-scale"></i>
+            </div>
+            <h3>Choose the Right Quality Level</h3>
+            <p>
+              Balance between speed and sophistication based on your use case:
+            </p>
+            <ul class="quality-guide">
+              <li><strong>Basic:</strong> Quick prototyping, simple testing</li>
+              <li><strong>Standard:</strong> Most development and testing scenarios</li>
+              <li><strong>Premium:</strong> Demo data, presentations, complex relationships</li>
+            </ul>
+          </div>
+
+          <div class="practice-card">
+            <div class="practice-icon">
+              <i class="fas fa-redo"></i>
+            </div>
+            <h3>Start Small, Then Scale</h3>
+            <p>
+              Begin with fewer rows (10-20) to verify the data structure meets your needs, then increase
+              the row count for full datasets.
+            </p>
+          </div>
+
+          <div class="practice-card">
+            <div class="practice-icon">
+              <i class="fas fa-text-height"></i>
+            </div>
+            <h3>Keep Column Names Simple</h3>
+            <p>
+              Use clear, simple column names like "First Name", "Email", or "Phone Number" that are easy to
+              understand and work with in spreadsheets or databases.
+            </p>
+          </div>
+
+          <div class="practice-card">
+            <div class="practice-icon">
+              <i class="fas fa-download"></i>
+            </div>
+            <h3>Save Your Favorite Configurations</h3>
+            <p>
+              Once you find data requirements that work well for you, save them in a notes app or document
+              so you can quickly generate similar datasets in the future.
+            </p>
+          </div>
+
+          <div class="practice-card">
+            <div class="practice-icon">
+              <i class="fas fa-clipboard-check"></i>
+            </div>
+            <h3>Validate Generated Data</h3>
+            <p>
+              Always review the preview table to ensure the generated data matches your expectations
+              before exporting or using it in your applications.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Cases Section -->
+      <div class="doc-section" id="use-cases">
+        <h2 class="section-title">
+          <i class="fas fa-briefcase section-icon"></i>
+          Common Use Cases
+        </h2>
+
+        <div class="use-cases-container">
+          <div class="use-case-card">
+            <div class="use-case-header">
+              <i class="fas fa-vial use-case-icon"></i>
+              <h3>Testing Your Application</h3>
+            </div>
+            <p>Create realistic sample data to test how your application works with different types of information.</p>
+            <div class="use-case-example">
+              <strong>Example:</strong> Generate 100 customer profiles to test your customer management system
+            </div>
+          </div>
+
+          <div class="use-case-card">
+            <div class="use-case-header">
+              <i class="fas fa-paint-brush use-case-icon"></i>
+              <h3>Design & Mockups</h3>
+            </div>
+            <p>Fill your design mockups with realistic-looking data to show clients how the final product will appear.</p>
+            <div class="use-case-example">
+              <strong>Example:</strong> Generate a product catalog with names, prices, and descriptions for an e-commerce design
+            </div>
+          </div>
+
+          <div class="use-case-card">
+            <div class="use-case-header">
+              <i class="fas fa-database use-case-icon"></i>
+              <h3>Populating Databases</h3>
+            </div>
+            <p>Quickly fill empty databases with sample data to start working on your project immediately.</p>
+            <div class="use-case-example">
+              <strong>Example:</strong> Generate order records with customer names, products, and purchase dates
+            </div>
+          </div>
+
+          <div class="use-case-card">
+            <div class="use-case-header">
+              <i class="fas fa-presentation use-case-icon"></i>
+              <h3>Demos & Presentations</h3>
+            </div>
+            <p>Create professional-looking sample data for product demonstrations and client presentations.</p>
+            <div class="use-case-example">
+              <strong>Example:</strong> Generate sales reports with realistic revenue figures and customer metrics
+            </div>
+          </div>
+
+          <div class="use-case-card">
+            <div class="use-case-header">
+              <i class="fas fa-graduation-cap use-case-icon"></i>
+              <h3>Training & Education</h3>
+            </div>
+            <p>Provide students and trainees with realistic datasets for learning data analysis and programming.</p>
+            <div class="use-case-example">
+              <strong>Example:</strong> Generate student grade records for database query practice
+            </div>
+          </div>
+
+          <div class="use-case-card">
+            <div class="use-case-header">
+              <i class="fas fa-chart-line use-case-icon"></i>
+              <h3>Practice & Learning</h3>
+            </div>
+            <p>Create sample datasets to practice data analysis, spreadsheet skills, or learn new software.</p>
+            <div class="use-case-example">
+              <strong>Example:</strong> Generate sales data to practice creating charts and reports in Excel
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Section -->
+      <div class="doc-footer">
+        <div class="footer-content">
+          <i class="fas fa-question-circle"></i>
+          <div>
+            <h3>Need Help?</h3>
+            <p>If you have questions or encounter issues, please contact our support team or refer to the examples above.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { WorkInProgressComponent } from '../../common/work-in-progress/work-in-progress.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-documentation',
-  imports: [WorkInProgressComponent],
+  imports: [CommonModule],
   templateUrl: './documentation.component.html',
   styleUrl: './documentation.component.css'
 })

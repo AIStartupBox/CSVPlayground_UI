@@ -36,14 +36,14 @@ export class NavbarComponent {
         route: '/data-generator',
         styleClass: '',
         command: () => this.navigateTo('/data-generator')
-      },
-      {
-        label: 'Data Formatter',
-        icon: 'fas fa-sliders-h',
-        route: '/data-formatter',
-        styleClass: '',
-        command: () => this.navigateTo('/data-formatter')
-      },
+       },
+      // {
+      //   label: 'Data Formatter',
+      //   icon: 'fas fa-sliders-h',
+      //   route: '/data-formatter',
+      //   styleClass: '',
+      //   command: () => this.navigateTo('/data-formatter')
+      // },
       {
         label: 'Documentation',
         icon: 'fas fa-book',

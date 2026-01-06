@@ -8,6 +8,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
 import { DataGeneratorService, GenerateCSVRequest, ResponseData } from '../../services/data-generator.service';
 import { take } from 'rxjs/operators';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-data-generator',
@@ -156,18 +157,258 @@ export class DataGeneratorComponent {
   }
 
   downloadExcel(): void {
-    console.log('Downloading Excel file...');
-    // Add download logic here
+    if (!this.generatedData || this.generatedData.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'No data available to export.',
+        life: 3000
+      });
+      return;
+    }
+
+    try {
+      // Create worksheet from JSON data
+      const worksheet = XLSX.utils.json_to_sheet(this.generatedData);
+
+      // Create workbook and add the worksheet
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      const filename = `data-export-${timestamp}.xlsx`;
+
+      // Save the file
+      XLSX.writeFile(workbook, filename);
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Downloaded!',
+        detail: 'Excel file downloaded successfully.',
+        life: 3000
+      });
+    } catch (error) {
+      console.error('Error downloading Excel:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to download Excel file.',
+        life: 3000
+      });
+    }
   }
 
   downloadCSV(): void {
-    console.log('Downloading CSV file...');
-    // Add download logic here
+    if (!this.generatedData || this.generatedData.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'No data available to export.',
+        life: 3000
+      });
+      return;
+    }
+
+    try {
+      // Create CSV header
+      const headers = this.columns.join(',');
+
+      // Create CSV rows
+      const rows = this.generatedData.map(row => {
+        return this.columns.map(col => {
+          const value = row[col];
+          // Escape values that contain commas, quotes, or newlines
+          if (value && (value.toString().includes(',') || value.toString().includes('"') || value.toString().includes('\n'))) {
+            return `"${value.toString().replace(/"/g, '""')}"`;
+          }
+          return value;
+        }).join(',');
+      });
+
+      // Combine header and rows
+      const csvContent = [headers, ...rows].join('\n');
+
+      // Create blob and download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      const filename = `data-export-${timestamp}.csv`;
+
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Downloaded!',
+        detail: 'CSV file downloaded successfully.',
+        life: 3000
+      });
+    } catch (error) {
+      console.error('Error downloading CSV:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to download CSV file.',
+        life: 3000
+      });
+    }
   }
 
   downloadJSON(): void {
-    console.log('Downloading JSON file...');
-    // Add download logic here
+    if (!this.generatedData || this.generatedData.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'No data available to export.',
+        life: 3000
+      });
+      return;
+    }
+
+    try {
+      // Convert data to formatted JSON
+      const jsonContent = JSON.stringify(this.generatedData, null, 2);
+
+      // Create blob and download
+      const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      const filename = `data-export-${timestamp}.json`;
+
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Downloaded!',
+        detail: 'JSON file downloaded successfully.',
+        life: 3000
+      });
+    } catch (error) {
+      console.error('Error downloading JSON:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to download JSON file.',
+        life: 3000
+      });
+    }
+  }
+
+  copyAsCSV(): void {
+    if (!this.generatedData || this.generatedData.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'No data available to copy.',
+        life: 3000
+      });
+      return;
+    }
+
+    try {
+      // Create CSV header
+      const headers = this.columns.join(',');
+
+      // Create CSV rows
+      const rows = this.generatedData.map(row => {
+        return this.columns.map(col => {
+          const value = row[col];
+          // Escape values that contain commas, quotes, or newlines
+          if (value && (value.toString().includes(',') || value.toString().includes('"') || value.toString().includes('\n'))) {
+            return `"${value.toString().replace(/"/g, '""')}"`;
+          }
+          return value;
+        }).join(',');
+      });
+
+      // Combine header and rows
+      const csvContent = [headers, ...rows].join('\n');
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(csvContent).then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Copied!',
+          detail: 'CSV data copied to clipboard successfully.',
+          life: 3000
+        });
+      }).catch(err => {
+        console.error('Failed to copy CSV:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to copy CSV to clipboard.',
+          life: 3000
+        });
+      });
+    } catch (error) {
+      console.error('Error generating CSV:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate CSV data.',
+        life: 3000
+      });
+    }
+  }
+
+  copyAsJSON(): void {
+    if (!this.generatedData || this.generatedData.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'No data available to copy.',
+        life: 3000
+      });
+      return;
+    }
+
+    try {
+      // Convert data to formatted JSON
+      const jsonContent = JSON.stringify(this.generatedData, null, 2);
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(jsonContent).then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Copied!',
+          detail: 'JSON data copied to clipboard successfully.',
+          life: 3000
+        });
+      }).catch(err => {
+        console.error('Failed to copy JSON:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to copy JSON to clipboard.',
+          life: 3000
+        });
+      });
+    } catch (error) {
+      console.error('Error generating JSON:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate JSON data.',
+        life: 3000
+      });
+    }
   }
 
   createEndpoint(): void {

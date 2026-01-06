@@ -178,7 +178,7 @@
 
               <!-- CSV Export Icon -->
               <button
-                (click)="downloadCSV()"
+                (click)="copyAsCSV()"
                 [disabled]="!isDataGenerated"
                 class="p-1.5 rounded-lg hover:bg-blue-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                 pTooltip="Copy as CSV"
@@ -188,7 +188,7 @@
               </button>
               <!-- JSON Export Icon -->
               <button
-                (click)="downloadJSON()"
+                (click)="copyAsJSON()"
                 [disabled]="!isDataGenerated"
                 class="p-1.5 rounded-lg hover:bg-purple-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                 pTooltip="Copy as JSON"

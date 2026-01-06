@@ -81,6 +81,7 @@ select option {
 
 ::ng-deep .p-datatable .p-datatable-tbody > tr td {
   background-color: transparent !important;
+  color: #000000 !important;
 }
 
 /* Remove any default focus outlines on table cells */
@@ -89,9 +90,10 @@ select option {
   box-shadow: none !important;
 }
 
-/* Ensure table header stays white */
+/* Ensure table header stays white with black text */
 ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
 /* Toast Styling */

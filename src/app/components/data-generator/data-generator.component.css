@@ -49,23 +49,49 @@ select option {
   }
 }
 
-/* PrimeNG Table - Remove click/selection color */
+/* PrimeNG Table - Remove click/selection color and ensure white background */
 ::ng-deep .p-datatable .p-datatable-tbody > tr {
   cursor: default;
+  background-color: #ffffff !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #f9fafb !important;
 }
 
 ::ng-deep .p-datatable .p-datatable-tbody > tr:focus {
-  outline: none;
-  background-color: inherit !important;
+  outline: none !important;
+  background-color: #ffffff !important;
+  box-shadow: none !important;
 }
 
 ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight {
-  background-color: inherit !important;
+  background-color: #ffffff !important;
   color: inherit !important;
 }
 
 ::ng-deep .p-datatable .p-datatable-tbody > tr:active {
-  background-color: inherit !important;
+  background-color: #ffffff !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr.p-selectable-row:focus {
+  background-color: #ffffff !important;
+  outline: none !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr td {
+  background-color: transparent !important;
+}
+
+/* Remove any default focus outlines on table cells */
+::ng-deep .p-datatable .p-datatable-tbody > tr td:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure table header stays white */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: #ffffff !important;
 }
 
 /* Toast Styling */

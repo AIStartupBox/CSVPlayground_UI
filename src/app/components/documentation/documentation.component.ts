@@ -9,4 +9,10 @@ import { CommonModule } from '@angular/common';
 })
 export class DocumentationComponent {
 
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }

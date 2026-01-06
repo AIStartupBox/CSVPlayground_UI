@@ -50,7 +50,7 @@
 }
 
 .toc-section .section-title {
-  color: white;
+  color: white !important;
   margin-bottom: 1rem;
   font-size: 1.3rem;
 }
@@ -69,7 +69,7 @@
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  color: white;
+  color: white !important;
   text-decoration: none;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
@@ -201,6 +201,11 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
+  color: #064e3b !important;
+}
+
+.solution strong {
+  color: #064e3b !important;
 }
 
 .solution-icon {
@@ -382,6 +387,11 @@
   align-items: flex-start;
   gap: 0.75rem;
   margin-top: 1rem;
+  color: #78350f !important;
+}
+
+.info-box span {
+  color: #78350f !important;
 }
 
 .info-box i {
@@ -631,29 +641,33 @@
   border-radius: 12px;
   padding: 2rem;
   margin-top: 3rem;
-  color: white;
+  color: white !important;
 }
 
 .footer-content {
   display: flex;
   align-items: flex-start;
   gap: 1.5rem;
+  color: white !important;
 }
 
 .footer-content i {
   font-size: 2rem;
   flex-shrink: 0;
+  color: white !important;
 }
 
 .footer-content h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.3rem;
+  color: white !important;
 }
 
 .footer-content p {
   margin: 0;
   opacity: 0.9;
   line-height: 1.6;
+  color: white !important;
 }
 
 @media (max-width: 768px) {

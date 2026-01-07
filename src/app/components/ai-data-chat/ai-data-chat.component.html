@@ -1,0 +1,328 @@
+<!-- Toast Component -->
+<p-toast position="top-center"></p-toast>
+
+<!-- Main Container -->
+<div class="h-screen w-full overflow-hidden flex flex-col bg-gray-50 container-height">
+
+  <!-- Main Content Grid - Responsive layout -->
+  <div class="flex-1 flex flex-col lg:flex-row gap-3 lg:gap-4 p-3 lg:p-4 overflow-hidden relative">
+
+    <!-- LEFT COLUMN: Upload & Preview - 30% width -->
+    <div
+      class="flex flex-col overflow-hidden w-full lg:w-[30%] absolute lg:relative h-full z-10 transition-transform duration-300 ease-in-out"
+      [class.translate-x-[-100%]]="currentView === 'chat' && isMobileView"
+      [class.translate-x-0]="currentView === 'upload' || !isMobileView">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col h-full overflow-hidden">
+
+        <!-- Header -->
+        <div class="px-4 lg:px-5 pt-1.5 pb-1 border-b border-gray-200">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <h3 class="text-sm font-semibold text-gray-900">AI Data Chat</h3>
+              <p class="text-xs text-gray-500 mt-0.5">Upload and query your data naturally</p>
+            </div>
+            <!-- Mobile Toggle Button - Shows when file is uploaded on mobile -->
+            <button
+              *ngIf="currentFile && isMobileView && currentView === 'upload'"
+              (click)="switchToView('chat')"
+              class="lg:hidden p-2 gradient-bg text-white rounded-lg transition hover:opacity-90 ml-2 flex-shrink-0"
+              aria-label="Open chat"
+              title="Open Chat">
+              <i class="fas fa-comments text-base"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto px-4 lg:px-5 py-3 space-y-3">
+
+          <!-- Upload Zone -->
+          <div>
+            <h3 class="text-xs font-medium text-gray-900 mb-2 border-l-4 pl-2 gradient-border">Upload Your Data</h3>
+
+            <!-- Drag and Drop Area -->
+            <div
+              (click)="fileInput.click()"
+              (drop)="onDrop($event)"
+              (dragover)="onDragOver($event)"
+              class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 hover:bg-gray-50 transition-all cursor-pointer"
+              role="button"
+              tabindex="0"
+              aria-label="Upload file area">
+              <i class="fas fa-file-upload text-3xl text-gray-400 mb-3"></i>
+              <p class="text-xs font-medium text-gray-700 mb-1">
+                Drag & drop your file here
+              </p>
+              <p class="text-xs text-gray-500 mb-3">or click to browse</p>
+              <input
+                type="file"
+                #fileInput
+                (change)="onFileSelected($event)"
+                class="hidden"
+                accept=".csv,.json,.xlsx,.xls"
+                aria-label="File input">
+              <button
+                class="gradient-bg text-white px-4 py-1.5 rounded-md text-xs font-medium transition hover:opacity-90">
+                Browse Files
+              </button>
+              <p class="text-xs text-gray-400 mt-3">
+                Supported: CSV, JSON, Excel (max 2MB)
+              </p>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div *ngIf="showProgressBar">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-xs font-medium text-gray-700">Uploading...</span>
+              <span class="text-xs font-semibold gradient-text">{{uploadProgress}}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-1.5">
+              <div class="gradient-bg h-1.5 rounded-full transition-all" [style.width.%]="uploadProgress"></div>
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="showError">
+            <div class="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start">
+              <i class="fas fa-exclamation-circle text-red-500 mt-0.5 mr-2 text-sm"></i>
+              <div class="flex-1">
+                <p class="text-xs font-medium text-red-800">Upload Error</p>
+                <p class="text-xs text-red-600 mt-0.5">{{errorText}}</p>
+              </div>
+              <button (click)="hideErrorMessage()" class="text-red-400 hover:text-red-600">
+                <i class="fas fa-times text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Uploaded Files List -->
+          <div *ngIf="currentFile">
+            <h3 class="text-xs font-medium text-gray-900 mb-2 border-l-4 pl-2 gradient-border">Uploaded File</h3>
+            <div class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+              <div class="flex items-center space-x-2 flex-1 min-w-0">
+                <i class="fas fa-file-{{getFileIcon(currentFile.name)}} text-green-600 text-lg flex-shrink-0"></i>
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-medium text-gray-900 truncate">{{currentFile.name}}</p>
+                  <p class="text-xs text-gray-500">{{formatFileSize(currentFile.size)}}</p>
+                </div>
+              </div>
+              <button (click)="removeFile()" class="text-gray-400 hover:text-red-600 ml-2 flex-shrink-0">
+                <i class="fas fa-times text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Data Preview -->
+          <div *ngIf="currentFile && previewData.length > 0">
+            <h3 class="text-xs font-medium text-gray-900 mb-2 border-l-4 pl-2 gradient-border">Data Preview</h3>
+            <div class="bg-gray-50 rounded-lg border border-gray-200 p-3 overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th *ngFor="let col of previewColumns" class="px-2 py-1.5 text-left text-xs font-medium text-gray-700">
+                      {{col}}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-600">
+                  <tr *ngFor="let row of previewData" class="border-t border-gray-200">
+                    <td *ngFor="let col of previewColumns" class="px-2 py-1.5 text-xs">{{row[col]}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="text-xs text-gray-500 mt-2 text-center">Showing first {{previewData.length}} rows</p>
+            </div>
+          </div>
+
+          <!-- Suggested Questions -->
+          <div *ngIf="currentFile">
+            <h3 class="text-xs font-medium text-gray-900 mb-2 border-l-4 pl-2 gradient-border">Suggested Questions</h3>
+            <div class="space-y-1.5">
+              <button
+                *ngFor="let question of suggestedQuestions"
+                (click)="askQuestion(question)"
+                class="w-full text-left px-3 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition text-xs text-gray-700">
+                <i class="fas fa-question-circle gradient-text mr-1.5 text-xs"></i>{{question}}
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Chat Interface - 70% width -->
+    <div
+      class="flex-1 flex flex-col overflow-hidden w-full absolute lg:relative h-full z-10 transition-transform duration-300 ease-in-out"
+      [class.translate-x-0]="currentView === 'chat' || !isMobileView"
+      [class.translate-x-full]="currentView === 'upload' && isMobileView">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col h-full overflow-hidden">
+
+        <!-- Header -->
+        <div class="px-4 lg:px-5 pt-1.5 pb-1 border-b border-gray-200">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-semibold text-gray-900">Chat Interface</h3>
+              <p class="text-xs text-gray-500 mt-0.5">Ask questions about your data</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <!-- Back Button (Mobile) -->
+              <button
+                (click)="switchToView('upload')"
+                class="lg:hidden p-1.5 hover:bg-gray-100 rounded-md transition"
+                aria-label="Back to upload">
+                <i class="fas fa-arrow-left text-gray-600 text-sm"></i>
+              </button>
+              <!-- Clear Chat Button -->
+              <button
+                *ngIf="chatHistory.length > 0"
+                (click)="clearChat()"
+                class="p-1.5 hover:bg-gray-100 rounded-md transition"
+                aria-label="Clear chat"
+                title="Clear chat">
+                <i class="fas fa-trash-alt text-gray-600 text-sm"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="flex-1 overflow-y-auto px-4 lg:px-5 py-3 space-y-3">
+
+          <!-- Welcome Message -->
+          <div *ngIf="welcomeMessageVisible" class="text-center py-8">
+            <div class="inline-block gradient-bg rounded-full p-4 mb-3">
+              <i class="fas fa-comments text-white text-2xl"></i>
+            </div>
+            <h3 class="text-sm font-semibold text-gray-900 mb-1.5">Ready to analyze your data</h3>
+            <p class="text-xs text-gray-600 max-w-md mx-auto">
+              Upload a file to get started. I'll help you explore, analyze, and visualize your data through natural conversation.
+            </p>
+          </div>
+
+          <!-- Chat Messages -->
+          <div *ngFor="let msg of chatHistory" class="message-enter">
+            <!-- User Message -->
+            <div *ngIf="msg.role === 'user'" class="flex justify-end">
+              <div class="max-w-xs sm:max-w-md lg:max-w-lg">
+                <div class="gradient-bg text-white rounded-xl rounded-tr-sm px-3 py-2">
+                  <p class="text-xs">{{msg.message}}</p>
+                </div>
+                <p class="text-xs text-gray-400 mt-0.5 text-right">{{getCurrentTime()}}</p>
+              </div>
+            </div>
+
+            <!-- AI Message -->
+            <div *ngIf="msg.role === 'ai'" class="flex justify-start">
+              <div class="flex items-start space-x-2 max-w-xs sm:max-w-md lg:max-w-2xl">
+                <div class="flex-shrink-0 w-6 h-6 rounded-full gradient-bg flex items-center justify-center">
+                  <i class="fas fa-robot text-white text-xs"></i>
+                </div>
+                <div class="flex-1">
+                  <div class="bg-gray-100 rounded-xl rounded-tl-sm px-3 py-2">
+                    <p class="text-xs text-gray-800" [innerHTML]="msg.message"></p>
+                    <div *ngIf="msg.includeActions" class="flex gap-1.5 mt-2 flex-wrap">
+                      <button class="px-2 py-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md text-xs font-medium transition">
+                        <i class="fas fa-table mr-1 text-xs"></i> Table
+                      </button>
+                      <button class="px-2 py-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md text-xs font-medium transition">
+                        <i class="fas fa-chart-line mr-1 text-xs"></i> Chart
+                      </button>
+                      <button class="px-2 py-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md text-xs font-medium transition">
+                        <i class="fas fa-download mr-1 text-xs"></i> Export
+                      </button>
+                    </div>
+                  </div>
+                  <p class="text-xs text-gray-400 mt-0.5">AI Assistant • {{getCurrentTime()}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typing Indicator -->
+          <div *ngIf="isTyping" class="flex justify-start">
+            <div class="flex items-start space-x-2">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full gradient-bg flex items-center justify-center">
+                <i class="fas fa-robot text-white text-xs"></i>
+              </div>
+              <div class="bg-gray-100 rounded-xl rounded-tl-sm px-3 py-2">
+                <div class="typing-indicator flex space-x-1">
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="border-t border-gray-200 px-4 lg:px-5 py-3 bg-gray-50">
+          <div class="flex items-end space-x-2">
+
+            <!-- Attachment Button -->
+            <button class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition flex-shrink-0"
+                    aria-label="Attach file">
+              <i class="fas fa-paperclip text-sm"></i>
+            </button>
+
+            <!-- Input Field -->
+            <div class="flex-1 relative">
+              <textarea
+                [(ngModel)]="chatInput"
+                (keydown)="onChatInputKeydown($event)"
+                rows="1"
+                placeholder="Ask a question about your data..."
+                class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-transparent resize-none text-xs"
+                aria-label="Chat input"
+                [disabled]="chatInputDisabled"></textarea>
+
+              <!-- Keyboard Icon -->
+              <div class="absolute right-2.5 bottom-2.5 text-xs text-gray-400">
+                <i class="fas fa-keyboard text-xs"></i>
+              </div>
+            </div>
+
+            <!-- Send Button -->
+            <button
+              (click)="sendMessage()"
+              class="p-2 gradient-bg text-white rounded-lg hover:opacity-90 transition flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Send message"
+              [disabled]="chatInputDisabled">
+              <i class="fas fa-paper-plane text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="flex flex-wrap gap-1.5 mt-2">
+            <button class="px-2.5 py-1 bg-white border border-gray-200 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-50" [disabled]="chatInputDisabled">
+              <i class="fas fa-chart-bar mr-1 text-xs"></i> Visualize
+            </button>
+            <button class="px-2.5 py-1 bg-white border border-gray-200 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-50" [disabled]="chatInputDisabled">
+              <i class="fas fa-filter mr-1 text-xs"></i> Filter
+            </button>
+            <button class="px-2.5 py-1 bg-white border border-gray-200 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-50" [disabled]="chatInputDisabled">
+              <i class="fas fa-calculator mr-1 text-xs"></i> Calculate
+            </button>
+            <button class="px-2.5 py-1 bg-white border border-gray-200 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50 transition disabled:opacity-50" [disabled]="chatInputDisabled">
+              <i class="fas fa-download mr-1 text-xs"></i> Export
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Action Button for Mobile View Switch - Always visible when file uploaded on mobile -->
+<button
+  *ngIf="currentFile"
+  [class.hidden]="!isMobileView"
+  (click)="toggleMobileView()"
+  class="floating-action-btn gradient-bg text-white w-14 h-14 rounded-full items-center justify-center transition-all flex lg:hidden"
+  aria-label="Toggle view"
+  [attr.title]="currentView === 'upload' ? 'Open Chat' : 'Back to Upload'">
+  <i class="fas text-lg" [ngClass]="{'fa-comments': currentView === 'upload', 'fa-upload': currentView === 'chat'}"></i>
+</button>

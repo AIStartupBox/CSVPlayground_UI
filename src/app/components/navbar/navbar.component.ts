@@ -44,6 +44,13 @@ export class NavbarComponent {
       //   styleClass: '',
       //   command: () => this.navigateTo('/data-formatter')
       // },
+      // {
+      //   label: 'AI Data Chat',
+      //   icon: 'fas fa-comments',
+      //   route: '/ai-data-chat',
+      //   styleClass: '',
+      //   command: () => this.navigateTo('/ai-data-chat')
+      // },
       {
         label: 'Documentation',
         icon: 'fas fa-book',

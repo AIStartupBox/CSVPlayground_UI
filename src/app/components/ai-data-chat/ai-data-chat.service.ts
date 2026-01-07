@@ -57,7 +57,7 @@ export interface UploadProgress {
   providedIn: 'root'
 })
 export class AiDataChatService {
-  private baseUrl = 'http://localhost:8000/api/v1';
+  private baseUrl = 'https://csv-playground-backend.onrender.com/api/v1';
   private uploadUrl = `${this.baseUrl}/upload-file`;
 
   constructor(private http: HttpClient) { }

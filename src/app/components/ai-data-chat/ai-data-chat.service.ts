@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 
 // Single sheet response structure
 export interface SingleSheetUploadResponse {
@@ -56,7 +57,7 @@ export interface UploadProgress {
   providedIn: 'root'
 })
 export class AiDataChatService {
-  private baseUrl = 'https://csv-playground-backend.onrender.com/api/v1';
+  private baseUrl = 'http://localhost:8000/api/v1';
   private uploadUrl = `${this.baseUrl}/upload-file`;
 
   constructor(private http: HttpClient) { }
@@ -222,5 +223,126 @@ export class AiDataChatService {
     } else {
       return Object.values(parsedData.sheets).reduce((total, sheet) => total + sheet.data.length, 0);
     }
+  }
+
+  // Signals for workflow chat streaming
+  private workflowStreamingContentSignal = signal<string>('');
+  private workflowIsStreamingSignal = signal<boolean>(false);
+  private workflowEventSourceSignal = signal<EventSource | null>(null);
+
+  // Expose readonly signals
+  readonly workflowStreamingContent = this.workflowStreamingContentSignal.asReadonly();
+  readonly workflowIsStreaming = this.workflowIsStreamingSignal.asReadonly();
+
+  /**
+   * Start workflow chat stream: POST request that returns SSE stream
+   */
+  startWorkflowChatStream(userQuestion: string, contextId: string, previousMessages: any[], threadId?: string): void {
+    this.closeWorkflowEventSource();
+    this.workflowStreamingContentSignal.set('');
+    this.workflowIsStreamingSignal.set(true);
+
+    const payload = {
+      user_question: userQuestion,
+      context_id: contextId,
+      previous_messages: previousMessages,
+      thread_id: threadId || this.generateUUID()
+    };
+    if (payload.previous_messages && Array.isArray(payload.previous_messages) && payload.previous_messages.length >= 2) {
+      payload.previous_messages = payload.previous_messages.slice(1, -1);
+    }
+
+    const url = `${this.baseUrl}/workflow/chat/stream`;
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'text/event-stream'
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.body;
+      })
+      .then(body => {
+        if (!body) {
+          throw new Error('Response body is null');
+        }
+        this.processStream(body);
+      })
+      .catch(error => {
+        console.error('Error initiating workflow stream:', error);
+        this.workflowIsStreamingSignal.set(false);
+      });
+  }
+
+  private async processStream(body: ReadableStream<Uint8Array>): Promise<void> {
+    const reader = body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          this.finishWorkflowStreaming();
+          break;
+        }
+
+        // Decode the chunk and add to buffer
+        buffer += decoder.decode(value, { stream: true });
+
+        // Process complete SSE messages
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6); // Remove 'data: ' prefix
+            try {
+              const parsedData = JSON.parse(data);
+              this.handleWorkflowStreamChunk(parsedData);
+            } catch (error) {
+              console.error('Error parsing SSE data:', error, 'Data:', data);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error reading stream:', error);
+      this.finishWorkflowStreaming();
+    }
+  }
+
+  private handleWorkflowStreamChunk(data: any): void {
+    if (data.response) {
+      this.workflowStreamingContentSignal.update((content: string) => content + data.response);
+    }
+    if (data.status === 'completed') {
+      this.finishWorkflowStreaming();
+    }
+    // Optionally handle other event types (next_node, token_count, etc.)
+  }
+
+  private finishWorkflowStreaming(): void {
+    this.closeWorkflowEventSource();
+    this.workflowIsStreamingSignal.set(false);
+  }
+
+  private closeWorkflowEventSource(): void {
+    const currentEventSource = this.workflowEventSourceSignal();
+    if (currentEventSource) {
+      currentEventSource.close();
+      this.workflowEventSourceSignal.set(null);
+    }
+  }
+
+  private generateUUID(): string {
+    return uuidv4();
   }
 }

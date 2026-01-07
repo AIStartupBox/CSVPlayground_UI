@@ -221,8 +221,19 @@
                 </div>
                 <div class="flex-1">
                   <div class="bg-gray-100 rounded-xl rounded-tl-sm px-3 py-2">
-                    <p class="text-xs text-gray-800" [innerHTML]="msg.message"></p>
-                    <div *ngIf="msg.includeActions" class="flex gap-1.5 mt-2 flex-wrap">
+                    <!-- Render markdown content -->
+                    <div *ngIf="msg.message" class="text-xs text-gray-800 markdown-content">
+                      <markdown [data]="msg.message"></markdown>
+                    </div>
+                    <!-- Show typing indicator if streaming and empty -->
+                    <div *ngIf="msg.isStreaming && !msg.message" class="typing-indicator flex space-x-1">
+                      <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                      <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                      <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                    </div>
+                    <!-- Show cursor if streaming with content -->
+                    <span *ngIf="msg.isStreaming && msg.message" class="inline-block w-1 h-3 bg-gray-800 ml-0.5 animate-pulse"></span>
+                    <!-- <div *ngIf="msg.includeActions" class="flex gap-1.5 mt-2 flex-wrap">
                       <button class="px-2 py-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md text-xs font-medium transition">
                         <i class="fas fa-table mr-1 text-xs"></i> Table
                       </button>
@@ -232,7 +243,7 @@
                       <button class="px-2 py-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md text-xs font-medium transition">
                         <i class="fas fa-download mr-1 text-xs"></i> Export
                       </button>
-                    </div>
+                    </div> -->
                   </div>
                   <p class="text-xs text-gray-400 mt-0.5">AI Assistant • {{getCurrentTime()}}</p>
                 </div>

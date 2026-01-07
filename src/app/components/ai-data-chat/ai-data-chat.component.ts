@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { MarkdownModule, provideMarkdown } from 'ngx-markdown';
 import { AiDataChatService, ParsedTableData } from './ai-data-chat.service';
 
 interface ChatMessage {
@@ -15,8 +16,8 @@ interface ChatMessage {
 
 @Component({
   selector: 'app-ai-data-chat',
-  imports: [CommonModule, FormsModule, ToastModule],
-  providers: [MessageService],
+  imports: [CommonModule, FormsModule, ToastModule, MarkdownModule],
+  providers: [MessageService, provideMarkdown()],
   templateUrl: './ai-data-chat.component.html',
   styleUrl: './ai-data-chat.component.css'
 })
@@ -59,6 +60,34 @@ export class AiDataChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkScreenSize();
+
+    // Subscribe to streaming content changes
+    this.subscribeToStreamingContent();
+  }
+
+  private subscribeToStreamingContent(): void {
+    // Use effect to watch for streaming content changes
+    const checkStreaming = () => {
+      const streamingContent = this.aiDataChatService.workflowStreamingContent();
+      const isStreaming = this.aiDataChatService.workflowIsStreaming();
+
+      if (streamingContent && this.chatHistory.length > 0) {
+        this.updateLastAIMessage(streamingContent, isStreaming);
+        this.scrollToBottom();
+      }
+
+      // Check if streaming finished
+      if (!isStreaming && streamingContent && this.chatHistory.length > 0) {
+        const lastMessage = this.chatHistory[this.chatHistory.length - 1];
+        if (lastMessage && lastMessage.role === 'ai' && lastMessage.isStreaming) {
+          lastMessage.isStreaming = false;
+        }
+      }
+
+      requestAnimationFrame(checkStreaming);
+    };
+
+    checkStreaming();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -222,19 +251,32 @@ export class AiDataChatComponent implements OnInit {
 
   sendMessage(): void {
     const message = this.chatInput.trim();
-    if (!message) return;
+    if (!message || this.aiDataChatService.workflowIsStreaming()) return;
 
     this.addUserMessage(message);
     this.chatInput = '';
 
-    // Simulate AI response
+    // Add a streaming AI message placeholder
+    this.addAIMessage('', false, true);
+
+    // Start workflow chat stream
+    this.aiDataChatService.startWorkflowChatStream(
+      message,
+      this.uploadedDataId, // contextId from uploaded file
+      this.chatHistory.map(msg => ({ role: msg.role, content: msg.message })), // previous messages with 'content'
+      undefined // threadId (optional)
+    );
+
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
     setTimeout(() => {
-      this.isTyping = true;
-      setTimeout(() => {
-        this.isTyping = false;
-        this.respondToQuery(message);
-      }, 1500);
-    }, 500);
+      const chatContainer = document.querySelector('.chat-container');
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    }, 100);
   }
 
   addUserMessage(message: string): void {
@@ -245,13 +287,22 @@ export class AiDataChatComponent implements OnInit {
     });
   }
 
-  addAIMessage(message: string, includeActions: boolean = false): void {
+  addAIMessage(message: string, includeActions: boolean = false, isStreaming: boolean = false): void {
     this.chatHistory.push({
       role: 'ai',
       message: message,
       timestamp: new Date(),
-      includeActions: includeActions
+      includeActions: includeActions,
+      isStreaming: isStreaming
     });
+  }
+
+  updateLastAIMessage(message: string, isStreaming: boolean = false): void {
+    const lastMessage = this.chatHistory[this.chatHistory.length - 1];
+    if (lastMessage && lastMessage.role === 'ai') {
+      lastMessage.message = message;
+      lastMessage.isStreaming = isStreaming;
+    }
   }
 
   respondToQuery(query: string): void {

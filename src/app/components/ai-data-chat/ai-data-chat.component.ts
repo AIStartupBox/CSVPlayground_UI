@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { AiDataChatService, ParsedTableData } from './ai-data-chat.service';
 
 interface ChatMessage {
   role: 'user' | 'ai';
   message: string;
   timestamp: Date;
   includeActions?: boolean;
+  isStreaming?: boolean;
 }
 
 @Component({
@@ -20,6 +22,7 @@ interface ChatMessage {
 })
 export class AiDataChatComponent implements OnInit {
   private messageService = inject(MessageService);
+  private aiDataChatService = inject(AiDataChatService);
 
   // File upload properties
   currentFile: File | null = null;
@@ -27,6 +30,8 @@ export class AiDataChatComponent implements OnInit {
   showProgressBar: boolean = false;
   showError: boolean = false;
   errorText: string = '';
+  uploadedDataId: string = '';
+  parsedTableData: ParsedTableData | null = null;
 
   // Chat properties
   chatHistory: ChatMessage[] = [];
@@ -117,31 +122,77 @@ export class AiDataChatComponent implements OnInit {
     this.showProgressBar = true;
     this.uploadProgress = 0;
 
-    const interval = setInterval(() => {
-      this.uploadProgress += 10;
+    console.log('Starting file upload:', file.name);
 
-      if (this.uploadProgress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
+    // Call the API service
+    this.aiDataChatService.uploadFile(file).subscribe({
+      next: (progress) => {
+        console.log('Upload progress:', progress);
+        this.uploadProgress = progress.progress;
+
+        if (progress.status === 'complete' && progress.response) {
           this.showProgressBar = false;
+          this.parsedTableData = progress.response;
+          this.uploadedDataId = progress.response.id;
           this.showUploadSuccess(file);
-        }, 500);
+        } else if (progress.status === 'error') {
+          this.showProgressBar = false;
+          this.showErrorMessage(progress.error || 'Failed to upload file. Please try again.');
+        }
+      },
+      error: (error) => {
+        console.error('Upload error:', error);
+        this.showProgressBar = false;
+        this.showErrorMessage(error.message || 'Failed to upload file. Please try again.');
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Upload Error',
+          detail: error.error?.message || 'Failed to upload file. Please try again.',
+          life: 5000
+        });
+      },
+      complete: () => {
+        console.log('Upload stream completed');
       }
-    }, 200);
+    });
   }
 
   showUploadSuccess(file: File): void {
-    // Show data preview
-    this.previewData = [
-      { 'Column 1': 'Sample', 'Column 2': 'Data', 'Column 3': 'Row 1' },
-      { 'Column 1': 'Sample', 'Column 2': 'Data', 'Column 3': 'Row 2' }
-    ];
+    if (!this.parsedTableData) {
+      return;
+    }
+
+    // Show data preview using actual data
+    this.previewData = this.aiDataChatService.getPreviewData(this.parsedTableData, 2);
+    this.previewColumns = this.aiDataChatService.getColumns(this.parsedTableData);
 
     // Enable chat
     this.enableChat();
 
+    // Prepare summary message
+    const totalRows = this.aiDataChatService.getTotalRows(this.parsedTableData);
+    let summaryMessage = `Great! I've loaded <strong>${file.name}</strong>. `;
+
+    if (this.parsedTableData.type === 'multi') {
+      const sheetCount = this.parsedTableData.sheetNames.length;
+      summaryMessage += `This Excel file contains <strong>${sheetCount} sheet(s)</strong> with a total of <strong>${totalRows} rows</strong>. `;
+    } else {
+      summaryMessage += `This file contains <strong>${totalRows} rows</strong> and <strong>${this.previewColumns.length} columns</strong>. `;
+    }
+
+    summaryMessage += 'I can help you analyze this data. What would you like to know?';
+
     // Add AI greeting
-    this.addAIMessage(`Great! I've loaded <strong>${file.name}</strong>. I can help you analyze this data. What would you like to know?`);
+    this.addAIMessage(summaryMessage);
+
+    // Show success toast
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Upload Successful',
+      detail: `${file.name} uploaded successfully!`,
+      life: 4000
+    });
 
     // Auto-switch to chat on mobile
     if (this.isMobileView) {
@@ -154,9 +205,12 @@ export class AiDataChatComponent implements OnInit {
   removeFile(): void {
     this.currentFile = null;
     this.previewData = [];
+    this.previewColumns = [];
     this.chatHistory = [];
     this.chatInputDisabled = true;
     this.welcomeMessageVisible = true;
+    this.parsedTableData = null;
+    this.uploadedDataId = '';
     this.switchToView('upload');
   }
 

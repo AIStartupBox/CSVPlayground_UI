@@ -26,10 +26,10 @@ export class DataGeneratorComponent {
   // Generation Parameters
   noOfRows: number = 1;
   minRows: number = 1;
-  maxRows: number = 100;
+  maxRows: number = 20;
   noOfColumns: number = 1;
   minColumns: number = 1;
-  maxColumns: number = 20;
+  maxColumns: number = 7;
   selectedModel: string = 'groq';
   selectedQuality: string = 'basic';
 
